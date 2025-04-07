@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>
+        {% block title %}
+            <header>
+                <div class="logo">sitePAP</div>
+                <nav>
+                <a href="#">Início</a>
+                <a href="#">Séries</a>
+                <a href="#">Filmes</a>
+                <a href="#">Minha Lista</a>
+                </nav>
+            </header>
+        {% endblock title %}
+    </title>
+
+    {% load static%}
+        {% include "partials/navbar.html" %}
+        <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+        <link rel="stylesheet" href = "{% static 'style.css' %}">
+    {% block others %} 
+    {% endblock others %}
+</head>
+<body class='bg-black text-gray-100 font-primary'>
+
+    {% block content %}
+
+    {% endblock content %}
+    
+</body>
+</html>

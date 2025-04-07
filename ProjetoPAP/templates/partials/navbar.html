@@ -1,0 +1,23 @@
+{% load static %}
+
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+<nav class="flex text-gray-100 justify-between items-right pl py-3 px-5 pb fixed w-full z-10">
+    
+    <div class="w-6/12">
+        <a href="#" onclick="window.history.back(); return false;">
+        <img src="{% static '.png' %}" alt="logo" class="w-6/12 md:w-2/12 netflixD">
+        </a>
+    </div>
+    <script>
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleButton = document.getElementById('toggle-button');
+                const dropdownMenu = document.getElementById('dropdown-menu');
+            
+                toggleButton.addEventListener('click', function() {
+                    dropdownMenu.classList.toggle('show');
+                });
+            });
+
+    </script>

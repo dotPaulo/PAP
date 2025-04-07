@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    sitePAP - Home
+{% endblock title %}
+{% load static %}
+
+{% block others %}
+<script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+{% endblock others %}
+    
+
+{% block content %}
+    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1416339306562-f3d12fefd36f');">
+        <div class="hero-content">
+        <h1 class="hero-title">Destaque do Dia</h1>
+        <p class="hero-description">Assista agora ao novo sucesso de bilheteria. Disponível apenas no sitePAP.</p>
+        <div class="hero-buttons">
+            <button class="btn">▶ Assistir</button>
+            <button class="btn" style="background-color: rgba(255, 255, 255, 0.2); border: 1px solid #fff;">ℹ Mais informações</button>
+        </div>
+        </div>
+    </section>
+{% endblock content %}
