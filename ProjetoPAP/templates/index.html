@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    sitePAP - Home
+    Netflix - Home
 {% endblock title %}
 {% load static %}
 
@@ -11,14 +11,74 @@
     
 
 {% block content %}
-    <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1416339306562-f3d12fefd36f');">
-        <div class="hero-content">
-        <h1 class="hero-title">Destaque do Dia</h1>
-        <p class="hero-description">Assista agora ao novo sucesso de bilheteria. Disponível apenas no sitePAP.</p>
-        <div class="hero-buttons">
-            <button class="btn">▶ Assistir</button>
-            <button class="btn" style="background-color: rgba(255, 255, 255, 0.2); border: 1px solid #fff;">ℹ Mais informações</button>
+
+    <header class="background min-h-screen bg-black bg-opacity-75 showcase border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'background_netflix.jpg' %}');">
+        <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
+            <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
+                Filmes ilimitados, séries e muito mais!
+            </h1>
+            <h3 class="text-xl md:text-xl py-5">
+                Assista onde quiser. Cancele quando quiser.
+            </h3>
+            <h4 class="text-sm md:text-lg pb-3">
+                Pronto para assistir? Introduza seu email para criar ou continue o seu plano!
+            </h4>
+
+            <div class="w-full flex justify-center">
+                <div class="flex justify-center items-center w-11/12 md:w-10/12">
+                        <button class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
+                            <span>
+                                Começar
+                            </span>
+                        </button>
+                    </a>
+                </div>
+            </div>
         </div>
+    </header>
+
+    <section class='flex flex-col md:flex-row items-center border-gray-900 border-b-8' style="min-height: 70vh;">
+        <div class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10 ">
+            <h2 class="description">
+                Divirta-se na sua TV.
+            </h2>
+            <h5 class="description">
+              Assista em Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray Players, e muito mais.
+            </h5>
+        </div>
+        <div class='md:w-1/2 flex justify-center items-center'>
+            <img src="{% static 'tv.png' %}" class="centro" alt="">
         </div>
     </section>
+
+    <section class='flex flex-col md:flex-row items-center border-gray-900 border-b-8' style="min-height: 70vh;">
+        <div class='md:w-1/2 flex justify-center items-center '>
+            <img src="{% static 'mobile-0819.jpg' %}" class="centro" alt="">
+        </div>
+
+        <div class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10">
+            <h2 class="description">
+                Baixe suas séries ou filmes prediletos para assistir offline.
+            </h2>
+            <h5 class="description">
+                Guarde seus filmes ou suas séries favoritas facilmente e sempre tenha algo para assistir!
+            </h5>
+        </div>
+        
+    </section>
+
+    <section class='flex flex-col md:flex-row items-center border-gray-900 border-b-8' style="min-height: 70vh;">
+        <div class="md:w-1/2 flex flex-col justify-center text-center md:text-left p-5 md:p-10">
+            <h2 class="description">
+                Crie perfis para crianças.
+            </h2>
+            <h5 class="description">
+                Envie seus filhos em aventuras com seus personagens favoritos em um espaço feito apenas para eles!
+            </h5>
+        </div>
+        <div class='md:w-1/2 flex justify-center items-center'>
+            <img src="{% static 'netflix_kid.png' %}" class="centro" alt="">
+        </div>
+    </section>
+
 {% endblock content %}
