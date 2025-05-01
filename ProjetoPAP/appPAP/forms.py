@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+
 from appPAP.models import Profile
 from django.forms import ModelForm
 from django import forms
@@ -13,8 +13,7 @@ class ProfileForm(ModelForm):
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['title', 'description', 'video_url']
+        fields = ['title', 'description']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
-        '''

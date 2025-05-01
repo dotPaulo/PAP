@@ -6,7 +6,7 @@
     
     <div class="w-6/12">
         <a href="#" onclick="window.history.back(); return false;">
-        <img src="{% static '' %}" alt="logo" class="w-6/12 md:w-2/12 netflixD">
+        <img src="{% static 'netflix.png' %}" alt="logo" class="w-6/12 md:w-2/12 netflixD">
         </a>
     </div>
     <script>
@@ -19,4 +19,43 @@
                     dropdownMenu.classList.toggle('show');
                 });
             });
+
     </script>
+    {% if AUTH != 'false'  %}
+
+        {% if request.user.is_authenticated %}
+
+            <div class="dropdown z-1 absolute">
+                <button class="dropdown-toggle" id="toggle-button">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="{% url 'watch_category' 'Action' %}" >Ação</a>
+                    <a href="{% url 'watch_category' 'Adventure'%}" >Aventura</a>
+                    <a href="{% url 'watch_category' 'Animation' %}" >Animação</a>
+                </div>
+            </div>
+
+            <div>
+            <form action="{% url 'account_logout' %}" method="post">
+                {% csrf_token %}
+                <button class='bg-primary_red marginL py-1 px-3 text-white md:text-lg rounded-md'>
+                    Deslogar
+                </button>
+            </form>
+            </div>
+
+            {% else %}
+            <div>
+            <a href="{% url 'account_signup' %}">
+
+                <button class='bg-primary_red py-1 px-3 text-white md:text-lg rounded-md'>
+                    Registar
+                </button>
+            </a>
+            </div>
+            {% endif %}
+        {% endif %}
+    </nav>

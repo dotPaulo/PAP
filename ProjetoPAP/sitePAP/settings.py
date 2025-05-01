@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     
     'allauth'
 
+
 ]
 
 MIDDLEWARE = [
@@ -128,12 +129,10 @@ STATIC_ROOT = BASE_DIR / 'static_root'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
-"""
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
-"""
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Para arquivos estáticos fora dos apps
+
 AUTHENTICATION_BACKENDS = [
 
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -143,5 +142,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 
 ]
+
+AUTH_USER_MODEL = 'appPAP.CustomUser'
 
 LOGIN_REDIRECT_URL = '/'

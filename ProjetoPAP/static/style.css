@@ -1,23 +1,5 @@
 /* HERO BANNER */
-.hero {
-  height: 60vh;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  margin-top: 60px;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 70%);
-}
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
 /*! tailwindcss v2.1.4 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
@@ -122,7 +104,7 @@ overflow: hidden;
 
 .bodyEdit {
   font-family: Arial, sans-serif;
-  display: flex;
+  display: center;
   justify-content: center;
   align-items: center;
   height: 100vh;
