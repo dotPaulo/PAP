@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'appPAP',
     
-    'allauth'
+    'allauth',
+    'allauth.account',
 
 
 ]
@@ -142,7 +143,14 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 
 ]
-
+    
 AUTH_USER_MODEL = 'appPAP.CustomUser'
+
+
+SITE_ID = 1
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_USERNAME_REQUIRED = False
 
 LOGIN_REDIRECT_URL = '/'

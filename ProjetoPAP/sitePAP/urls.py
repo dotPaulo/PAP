@@ -23,6 +23,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
+    path('accounts/', include('allauth.urls')),  
     
     # Perfil
     path('profile/', ProfileListView.as_view(), name='profile_list'),

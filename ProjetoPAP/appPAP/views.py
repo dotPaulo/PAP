@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Profile, Movie, CustomUser
+from .models import Profile, Movie
 from .forms import MovieForm
 from django.contrib.auth.decorators import login_required
 
