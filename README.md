@@ -36,4 +36,4 @@ A ideia surgiu da necessidade de tornar o estudo mais acessível e engajador, es
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a [licença MIT License].
+A minha :).
