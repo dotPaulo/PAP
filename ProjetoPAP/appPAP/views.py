@@ -1,74 +1,65 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Profile, Movie
-from .forms import MovieForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse
-# ----------- View Home -----------
+
+from .models import Profile, Movie
+from .forms import MovieForm
 
 class Home(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('profile_list')  # Use o nome da URL ou '/profiles/'
-        return render(request, 'index.html')
+            return redirect('profile_list')
+        
+        trending_movies = Movie.objects.order_by('-created')[:10]  # Pega os 10 filmes mais recentes
+        return render(request, 'index.html', {'trending_movies': trending_movies})
 
-# ----------- Views de Perfil -----------
+
 class ProfileListView(LoginRequiredMixin, ListView):
     model = Profile
     template_name = 'profileList.html'
-    context_object_name = 'profile'
-    def test_func(self):
-        return self.request.user.role == 'ADMIN_TEACHER'
+    context_object_name = 'profiles'
+
+    def get_queryset(self):
+        return self.request.user.profiles.all()
 
 class ProfileCreateView(LoginRequiredMixin, CreateView):
     model = Profile
-    fields = [] 
+    fields = ['name', 'role']
     template_name = 'profileCreate.html'
-    
-    success_url = '/profile/'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['show_admin_fields'] = False
-        if self.request.method == 'POST' and self.request.POST.get('role') == 'ADMIN_TEACHER':
-            context['show_admin_fields'] = True
-        return context
+    success_url = '/profiles/'
 
     def form_valid(self, form):
-        # Verifique se os campos de admin foram preenchidos e validados
-        if form.data.get('role') == 'ADMIN_TEACHER':
-            admin_user = form.data.get('admin_user')
-            admin_password = form.data.get('admin_password')
-
-            if not admin_user or not admin_password:
-                messages.error(self.request, "Por favor, preencha o usuário e senha de administrador.")
-                return self.form_invalid(form)  # Redisplay o formulário com erros
-
-            # Aqui você precisa validar as credenciais do admin
-            # Exemplo:
-            # admin = authenticate(username=admin_user, password=admin_password)
-            # if admin is None or admin.role != 'ADMIN':
-            #     messages.error(self.request, "Credenciais de administrador inválidas.")
-            #     return self.form_invalid(form)
-            
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
+        profile = form.save()
+        self.request.user.profiles.add(profile)
+        return redirect(self.success_url)
 
 class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Profile
     template_name = 'profileDelete.html'
-    success_url = '/profile/'
+    success_url = '/profiles/'
 
     def test_func(self):
-        return self.request.user.role == 'ADMIN_TEACHER'
+        return self.request.user.is_staff or self.request.user.is_superuser
+    
+class ProfileEditSelection(LoginRequiredMixin, View):
+    def get(self, request):
+        profiles = request.user.profiles.all()
+        return render(request, 'profileEditSelection.html', {'profiles': profiles})
+    
+    def get_queryset(self):
+        # Retorna só os perfis associados ao usuário logado
+        return self.request.user.profiles.all()
+        
+class ProfileEdit(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ['name', 'watch_later', 'favorites']
+    template_name = 'profile_edit.html'
+    pk_url_kwarg = 'profile_id'
+    success_url = '/profiles/'
 
-# ----------- Views de Filme -----------
 class MovieListView(ListView):
     model = Movie
     template_name = 'movies/movie_list.html'
@@ -76,25 +67,21 @@ class MovieListView(ListView):
 
 class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Movie
-    form_class = MovieForm  
+    form_class = MovieForm
     template_name = 'movies/movie_create.html'
+    success_url = '/movies/'
 
     def test_func(self):
-        # Somente professores admin podem criar filmes
-        return self.request.user.role == 'ADMIN_TEACHER'
-
-    def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 class MovieUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Movie
     form_class = MovieForm
     template_name = 'movies/movie_update.html'
+    success_url = '/movies/'
 
     def test_func(self):
-        # Somente o admin pode editar
-        return self.request.user.role == 'ADMIN_TEACHER'
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Movie
@@ -102,30 +89,81 @@ class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = '/movies/'
 
     def test_func(self):
-        return self.request.user.role == 'ADMIN_TEACHER'
-    
-def WatchCategory_view(request, categoria):
-    movies = Movie.objects.filter(type = categoria)
-    return render(request, 'watch_category.html', {'movies': movies})
+        return self.request.user.is_staff or self.request.user.is_superuser
 
-# ----------- Ações de Filme (Ver Depois / Favoritos) -----------
+
+class Watch(View):
+    def get(self,request,profile_id,*args, **kwargs):
+        try:
+            profile=Profile.objects.get(uuid=profile_id)
+
+            movies=Movie.objects.filter(age_limit=profile.age_limit)
+
+            try:
+                showcase=movies[0]
+            except :
+                showcase=None
+            
+
+            if profile not in request.user.profiles.all():
+                return redirect(to='profile_list')
+            return render(request,'movieList.html',{
+                'movies':movies,'show_case':showcase
+            })
+        except Profile.DoesNotExist:
+            return redirect(to='profile_list')
+
+
 @login_required
 def add_to_watch_later(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
-    profile = request.user.profile
+    profile = request.user.profiles.first()
+    if not profile:
+        messages.error(request, "Nenhum perfil selecionado.")
+        return redirect('profile_list')
     profile.watch_later.add(movie)
     return redirect('movie_list')
 
 @login_required
 def remove_from_watch_later(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
-    profile = request.user.profile
+    profile = request.user.profiles.first()
+    if not profile:
+        messages.error(request, "Nenhum perfil selecionado.")
+        return redirect('profile_list')
     profile.watch_later.remove(movie)
     return redirect('movie_list')
 
 @login_required
 def add_to_favorites(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
-    profile = request.user.profile
+    profile = request.user.profiles.first()
+    if not profile:
+        messages.error(request, "Nenhum perfil selecionado.")
+        return redirect('profile_list')
     profile.favorites.add(movie)
     return redirect('movie_list')
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def verificar_admin_password(request):
+    if request.method == "POST":
+        senha = request.POST.get("senha", "")
+        if Profile.objects.filter(role="ADMIN_TEACHER", admin_password=senha).exists():
+            return JsonResponse({"status": "ok"})
+        return JsonResponse({"status": "erro", "mensagem": "Senha incorreta."})
+
+# Handlers de erro
+def handler400(request, exception):
+    return render(request, 'errors/400.html', status=400)
+
+def handler403(request, exception):
+    return render(request, 'errors/403.html', status=403)
+
+def handler404(request, exception):
+    return render(request, 'errors/404.html', status=404)
+
+def handler500(request):
+    return render(request, 'errors/500.html', status=500)

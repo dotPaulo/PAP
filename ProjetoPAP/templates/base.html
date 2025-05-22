@@ -1,3 +1,4 @@
+{% load static %}  {# Isso deve ser a PRIMEIRA linha do arquivo #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,26 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+     <!-- Favicon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
+    
     <title>
-        {% block title %}
-        
-        {% endblock title %}
+        {% block title %}{% endblock title %}
     </title>
 
-    {% load static%}
-        {% include "partials/navbar.html" %}
-        <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
-        <link rel="stylesheet" href = "{% static 'style.css' %}">
-    {% block others %} 
-    
+    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    {% block others %}
     {% endblock others %}
 </head>
 <body class='bg-black text-gray-100 font-primary'>
 
-    {% block content %}
+    {% include "partials\navbar.html" %}
 
-    {% endblock content %}
+    {% block content %}{% endblock content %}
+
+    {% include "partials\footer.html" %}
     
 </body>
 </html>

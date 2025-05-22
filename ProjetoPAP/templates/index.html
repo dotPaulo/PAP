@@ -1,41 +1,65 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}
     sitePAP - Home
 {% endblock title %}
-{% load static %}
 
 {% block others %}
-<script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="{% static 'JS/swiper-init.js' %}"></script>
 {% endblock others %}
     
 
 {% block content %}
 
-    <header class="background min-h-screen bg-black bg-opacity-75 showcase border-b-8 flex justify-center items-center bg-no-repeat"  style="background-image: url('{% static 'background_netflix.jpg' %}');">
-        <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
-            <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
-                Uma forma mais facil de ensinar!
-            </h1>
-            <h3 class="text-xl md:text-xl py-5">
-                Utilize filmes para facilitar o seu ensino e prender a atenção dos alunos!
-            </h3>
-            <h4 class="text-sm md:text-lg pb-3">
-                Aceda ao seu perfil de professor para começar!
-            </h4>
+<header class="background min-h-screen bg-black bg-opacity-75 showcase border-b-8 flex justify-center items-center bg-no-repeat"  
+    style="background-image: (( static 'background_netflix.jpg' ))">
+    
+    <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
+        <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
+            Uma forma mais fácil de ensinar!
+        </h1>
+        <h3 class="text-xl md:text-xl py-5">
+            Utilize filmes para facilitar o seu ensino e prender a atenção dos alunos!
+        </h3>
+        <h4 class="text-sm md:text-lg pb-3">
+            Aceda ao seu perfil de professor para começar!
+        </h4>
 
-            <div class="w-full flex justify-center">
-                <div class="flex justify-center items-center w-11/12 md:w-10/12">
-                    <a href='{% url "account_signup" %}' class='md:w-1/4'>             
-                        <button class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
-                            <span>
-                                Começar
-                            </span>
-                        </button>
-                    </a>
-                </div>
+        <div class="w-full flex justify-center">
+            <div class="flex justify-center items-center w-11/12 md:w-10/12">
+                <a href="{% url 'account_signup' %}" class="md:w-1/4">             
+                    <button class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
+                        <span>Começar</span>
+                    </button>
+                </a>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+
+<!-- Tendências atuais -->
+<section class="bg-black text-white py-10">
+  <h2 class="text-2xl font-semibold mb-5 ml-5">Possuimos na biblioteca</h2>
+
+  <!-- Swiper Container -->
+  <div class="swiper-container w-full px-5">
+    <div class="swiper-wrapper">
+      {% for movie in trending_movies %}
+      <div class="swiper-slide relative">
+        <img src="{{ movie.flyer.url }}" alt="{{ movie.title }}" class="rounded-md w-16 h-16 object-cover">
+        <span class="absolute top-2 left-2 bg-black bg-opacity-60 text-white text-4xl font-bold px-3 py-1 rounded">
+          {{ forloop.counter }}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="swiper-button-next text-white"></div>
+    <div class="swiper-button-prev text-white"></div>
+  </div>
+</section>
 
 {% endblock content %}

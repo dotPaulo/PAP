@@ -6,55 +6,52 @@
 
 
 {% block content %}
+<section class='bg-primary_black min-h-screen py-20 md:py-32 flex-col flex items-center' style='background-image:url("{% static 'background_netflix.jpg' %}")'>
+    <div class="flex flex-wrap justify-center  w-10/12  md:w-6/12">
+        <form method='POST' id="profileForm" class="w-full md:w-8/12 bg-gray-900 p-5 rounded-lg">
+            <h1 class="text-4xl text-center text-gray-100 font-medium">
+                Criar Perfil
+            </h1>
+            {% csrf_token %}
+            {{ form.errors }}
+            <div class="my-4"> 
+                <label class='text-lg text-gray-200 font-medium mb-3'>
+                    Nome do Perfil
+                </label>
+                <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" type="text" name="name" id="id_name" placeholder="Nome do Perfil">
+            </div>
 
-    <section class='bg-primary_black min-h-screen py-20 md:py-32 flex-col flex items-center' style='background-image:url("{% static 'background_netflix.jpg' %}")'>
-        <div class="flex flex-wrap justify-center  w-10/12  md:w-6/12">
-            <form method='POST' class="w-full md:w-8/12 bg-gray-900 p-5 rounded-lg">
-                    <h1 class="text-4xl text-center text-gray-100 font-medium">
-                        Criar Perfil
-                    </h1>
-                    {% csrf_token %}
-                    {{form.errors}}
-                    <div class="my-4"> 
-                        <Label class='text-lg text-gray-200 font-medium mb-3'>
-                            Nome do Perfil
-                        </Label>
-                        <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" type="text" name="name" id="id_name" placeholder="Nome do Perfil">
-                    </div>
-                    <!-- Seu select original -->
-                    <div class="my-4">
-                        <Label class='text-lg text-gray-200 font-medium mb-3'>Opções</Label>
-                        <select class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" name="role" id="id_role">
-                            <option value='REGULAR_TEACHER'>Professor</option>
-                            <option value='ADMIN_TEACHER'>Administrador</option>
-                        </select>
-                    </div>
+            <div class="my-4">
+                <label class='text-lg text-gray-200 font-medium mb-3'>Opções</label>
+                <select class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" name="role" id="id_role">
+                    <option value='Regular'>Professor</option>
+                    <option value='Administrador'>Administrador</option>
+                </select>
+            </div>
 
-                   <!-- Modal de Confirmação de Admin -->
-                    <div id="admin-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full shadow-lg">
-                            <h3 class="text-xl text-gray-200 mb-4">Confirmação de Administrador</h3>
-                            <div class="mb-3">
-                                <label class="text-gray-200 block mb-1" for="admin_user">Usuário Admin</label>
-                                <input type="text" id="admin_user" name="admin_user" class="p-2 bg-gray-600 rounded-sm text-gray-200 outline-none w-full">
-                            </div>
-                            <div class="mb-4">
-                                <label class="text-gray-200 block mb-1" for="admin_password">Senha Admin</label>
-                                <input type="password" id="admin_password" name="admin_password" class="p-2 bg-gray-600 rounded-sm text-gray-200 outline-none w-full">
-                            </div>
-                            <div class="flex gap-2 justify-end">
-                                <button id="cancel-btn" class="px-4 py-2 bg-gray-500 text-gray-200 rounded-md" type="button">Cancelar</button>
-                                <button id="confirm-btn" class="px-4 py-2 bg-green-600 text-gray-200 rounded-md" type="button">Confirmar</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center items-center">
-                        <button class="px-4 py-2 rounded-md outline-none bg-primary_red text-gray-100">Create Profile</button>
-                    </div>
-                </form> 
-            <input type="hidden" name="confirmed_admin" id="confirmed_admin" value="false">
-            <script src="{% static 'appPAP/profile.js' %}"></script>
+            <!-- Botão de Criar Perfil -->
+            <div class="text-center mt-6">
+                <button type="submit" class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
+                    Criar Perfil
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Modal oculto inicialmente -->
+<div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg w-96 shadow-lg">
+        <h2 class="text-xl font-bold mb-4 text-center">Confirmação de Administrador</h2>
+        <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-2">Digite a senha secreta:</label>
+        <input type="password" id="adminPassword" class="w-full border border-gray-300 rounded px-3 py-2 mb-3 focus:outline-none">
+        <p id="adminError" class="text-red-500 text-sm hidden">Senha incorreta.</p>
+        <div class="flex justify-end gap-3">
+            <button onclick="closeModal()" class="bg-gray-300 px-4 py-2 rounded">Cancelar</button>
+            <button onclick="verifyPassword()" class="bg-primary_red text-white px-4 py-2 rounded">Confirmar</button>
         </div>
-    </section>
+    </div>
+</div>
 
+<script src="{% static 'JS/profileCreate.js' %}"></script>
 {% endblock content %}

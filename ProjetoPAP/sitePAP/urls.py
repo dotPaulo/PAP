@@ -1,50 +1,46 @@
-"""
-URL configuration for sitePAP project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.urls import include, path
-from appPAP.views import *
+from django.urls import path, include
 from django.contrib import admin
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
+from appPAP.views import (
+    Home,
+    ProfileListView, ProfileCreateView, ProfileDeleteView, ProfileEditSelection, ProfileEdit,
+    MovieListView, MovieCreateView, MovieUpdateView, MovieDeleteView, Watch,
+    add_to_watch_later, remove_from_watch_later, add_to_favorites, verificar_admin_password
+)
 
 urlpatterns = [
+    # Admin Painel
     path('admin/', admin.site.urls),
-    path('', Home.as_view()),
-    path('accounts/', include('allauth.urls')),  
-    
-    # Perfil
-    path('profile/', ProfileListView.as_view(), name='profile_list'),
-    path('profile/create/', ProfileCreateView.as_view(), name='profile_create'),
-    path('profile/delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),
+    path('verificar-admin/', verificar_admin_password, name='verificar_admin'),
+    path('accounts/', include('allauth.urls')),
+
+    # Home
+    path('', Home.as_view(), name='home'),
+
+
+    # Perfis
+    path('profiles/', ProfileListView.as_view(), name='profile_list'),
+    path('profiles/create/', ProfileCreateView.as_view(), name='profile_create'),
+    path('profiles/delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),
+    path("profile/edit/", ProfileEditSelection.as_view(), name = "profile_editSelection"),
+    path("profile/edit/<uuid:profile_id>", ProfileEdit.as_view(), name = "profile_edit"),
 
     # Filmes
     path('movies/', MovieListView.as_view(), name='movie_list'),
     path('movies/create/', MovieCreateView.as_view(), name='movie_create'),
-    path('movies/update/<int:pk>/', MovieUpdateView.as_view(), name='movie_update'),
-    path('movies/delete/<int:pk>/', MovieDeleteView.as_view(), name='movie_delete'),
+    path('movies/<int:pk>/edit/', MovieUpdateView.as_view(), name='movie_edit'),
+    path('movies/<int:pk>/delete/', MovieDeleteView.as_view(), name='movie_delete'),
+    #path('movies/category/<str:categoria>/', WatchCategory_view, name='watch_category'),
 
-    # Categorias
-    path('movies/category/<str:categoria>/', WatchCategory_view, name='watch_category'),
-
-    # Ações de filme
-    path('movies/<int:movie_id>/watch_later/add/', add_to_watch_later, name='add_to_watch_later'),
-    path('movies/<int:movie_id>/watch_later/remove/', remove_from_watch_later, name='remove_from_watch_later'),
+    # Ações do usuário
+    path('movies/<int:movie_id>/watchlater/add/', add_to_watch_later, name='add_to_watch_later'),
+    path('movies/<int:movie_id>/watchlater/remove/', remove_from_watch_later, name='remove_from_watch_later'),
     path('movies/<int:movie_id>/favorites/add/', add_to_favorites, name='add_to_favorites'),
+
+    #Watch
+     path('watch/<uuid:profile_id>/',Watch.as_view(),name='watch'),
 ]
 
 if settings.DEBUG:
-    urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
-    urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
