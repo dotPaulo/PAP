@@ -117,13 +117,13 @@ class ProfileEdit(LoginRequiredMixin, UpdateView):
 #Movie
 class MovieListView(ListView):
     model = Movie
-    template_name = 'movies/movie_list.html'
+    template_name = 'movieList.html'
     context_object_name = 'movies'
 
 class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Movie
     form_class = MovieForm
-    template_name = 'movies/movie_create.html'
+    template_name = 'movieCreate.html'
     success_url = '/movies/'
 
     def test_func(self):
@@ -132,7 +132,7 @@ class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 class MovieUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Movie
     form_class = MovieForm
-    template_name = 'movies/movie_update.html'
+    template_name = 'movieUpdate.html'
     success_url = '/movies/'
 
     def test_func(self):
@@ -140,7 +140,7 @@ class MovieUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Movie
-    template_name = 'movies/movie_delete.html'
+    template_name = 'movieDelete.html'
     success_url = '/movies/'
 
     def test_func(self):
