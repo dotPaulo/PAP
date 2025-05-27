@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block page_title %}
-    Netflix - Editar Perfil
+    sitePAP - Editar Perfil
 {% endblock page_title %}
 
 
@@ -15,15 +15,15 @@
                     
                     <h2 class = 'py-2'>Alterações</h2>
                     <label for="name">Nome do Perfil:</label>
-                    <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full my-3" type="text" name="name" id="id_name" placeholder="Profile name">
+                    <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full my-3" type="text" name="name" id="id_name" placeholder="Nome do Perfil">
+                    
                     <label for="options">Opções:</label>
-
                     <select class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full"  name="age_limit" id="id_age_limit" >
                         <option value='Administrador'>Administrador</option>
-                        <option value='Regular'>`Professor</option>
+                        <option value='Regular'>Professor</option>
                     </select>
 
-                    <button class = 'px-4 my-4 rounded-md outline-none bg-primary_red text-gray-100 button-container' type="submit">Enviar</button>  
+                    <button class = 'px-4 my-4 rounded-md outline-none bg-primary_red bg-primary_red marginL' type="submit">Enviar</button>  
                               
                 </form>
 

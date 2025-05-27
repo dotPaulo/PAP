@@ -2,20 +2,20 @@
 {% load static %}
 
 {% block title %}
-Netflix - Profile
+    sitePAP - Perfis
 {% endblock title %}
 
 {% block content %}
     
     <section class='bg-primary_black min-h-screen py-20 md:py-0 flex-col flex justify-center items-center'>
         <h2 class="text-center font-medium text-5xl my-4 text-gray-100">
-            Quem está assistindo?
+            Crie um perfil.
         </h2>
 
         <div class="flex flex-wrap justify-center items-center w-10/12  md:w-6/12">
 
         {% for profile in profiles %}
-            <a href="{% url 'watch' profile_id=profile.uuid %}">
+            <a href="{% url 'profile_login' profile_uuid=profile.uuid %}">
                 <div class="w-32 h-32 m-4  bg-blue-500 flex justify-center items-center flex-col rounded-md cursor-pointer">
                     <p class='text-6xl'>
                         {{profile.name | slice:":1"}}
@@ -28,16 +28,6 @@ Netflix - Profile
         {% endfor %}
 
         </div>
-        {% if request.user.profiles.all|length < 5%}
-            <div class="flex justify-center items-center">
-                <a href="{% url 'profile_create' %}">
-                    
-                    <button class="px-4 py-2 rounded-md outline-none bg-gray-400 text-gray-100">
-                        Adicionar novo perfil
-                    </button>
-                </a>
-            </div>
-        {% endif %}
         
         {% if request.user.profiles.all|length >= 1 %}
         <div class = "flex justify-center items-center">

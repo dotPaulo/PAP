@@ -11,25 +11,14 @@
     {% if AUTH != 'false'  %}
 
         {% if request.user.is_authenticated %}
-
-            <div>
-            <form action="{% url 'account_logout' %}" method="post">
-                {% csrf_token %}
-                <button class='bg-primary_red marginL py-1 px-3 text-white md:text-lg rounded-md'>
-                    Deslogar
-                </button>
-            </form>
-            </div>
-
-            {% else %}
-            <div>
-            <a href="{% url 'account_login' %}">
-
-                <button class='bg-primary_red py-1 px-3 text-white md:text-lg rounded-md'>
-                    Iniciar Sessão
-                </button>
-            </a>
-            </div>
+                <div>
+                <form action="{% url 'account_logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class='bg-primary_red marginL py-1 px-3 text-white md:text-lg rounded-md'>
+                        Deslogar
+                    </button>
+                </form>
+                </div>
             {% endif %}
         {% endif %}
     </nav>
