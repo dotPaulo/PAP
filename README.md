@@ -1,4 +1,4 @@
-# 📚 EduVideo - Plataforma de Vídeos Educativos
+# 📚 sitePAP (sem nome ainda) - Plataforma de Vídeos Educativos
 
 Este projeto faz parte da minha Prova de Aptidão Profissional (PAP) e tem como objetivo desenvolver uma **plataforma de visualização de vídeos com foco educacional**. Inspirado em plataformas de streaming modernas, o site foi projetado para ser simples, intuitivo e eficiente no auxílio ao aprendizado.
 
@@ -36,4 +36,4 @@ A ideia surgiu da necessidade de tornar o estudo mais acessível e engajador, es
 
 ## 📄 Licença
 
-A minha :).
+A minha :p
