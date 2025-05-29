@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
-from .models import Profile, Movie
-from .forms import MovieForm
+from .models import Profile, Movie, CustomUser
+from .forms import MovieForm, CustomUserRegisterForm
 
 
 # Home 
@@ -47,6 +47,27 @@ def dashboard_view(request):
     }
 
     return render(request, 'dashboard.html', context)
+
+@login_required
+def register_custom_user(request):
+    if request.method == 'POST':
+        form = CustomUserRegisterForm(request.POST)
+        if form.is_valid():
+            user = CustomUser.objects.create_user(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password']
+            )
+            Profile.objects.create(
+                user=user,
+                name=form.cleaned_data['profile_name'],
+                role=form.cleaned_data['role'],
+                password=form.cleaned_data['password'],  
+            )
+            return redirect('profile_list')  # ou onde quiser redirecionar após sucesso
+    else:
+        form = CustomUserRegisterForm()
+    return render(request, 'admin/profile_create.html', {'form': form})
 
 #Profile
 def profile_login(request, profile_uuid):
@@ -96,18 +117,18 @@ class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     
 class ProfileEditSelection(LoginRequiredMixin, View):
     def get(self, request):
-        profiles = request.user.profiles.all()
-        return render(request, 'profileEditSelection.html', {'profiles': profiles})
+        profiles = Profile.objects.all()
+        return render(request, 'admin/profileEditSelection.html', {'profiles': profiles})
         
 class ProfileEdit(LoginRequiredMixin, UpdateView):
     model = Profile
     fields = ['name', 'watch_later', 'favorites']
-    template_name = 'profileEdit.html'
+    template_name = 'admin/profileEdit.html'
     pk_url_kwarg = 'profile_id'
     success_url = '/profiles/'
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Profile, uuid=self.kwargs['profile_id'], customuser=self.request.user)
+        return get_object_or_404(Profile, uuid=self.kwargs['profile_id'])
 
     def form_valid(self, form):
         # Salva o perfil atualizado

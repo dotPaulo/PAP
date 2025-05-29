@@ -1,4 +1,5 @@
-{% load static %}  {# Isso deve ser a PRIMEIRA linha do arquivo #}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/Imagens/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
 
     <title>
         {% block title %}{% endblock title %}
@@ -38,9 +39,7 @@
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-
     {% block others %}
-    {# Bloco para CSS/JS adicionais das páginas filhas #}
     {% endblock others %}
 </head>
 <body class="bg-black text-gray-100 font-primary">
@@ -51,6 +50,6 @@
     {% endblock content %}
 
     {% include "partials/footer.html" %}
-    
+
 </body>
 </html>

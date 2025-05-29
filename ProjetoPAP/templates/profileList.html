@@ -16,7 +16,7 @@
 
         {% for profile in profiles %}
             <a href="{% url 'profile_login' profile_uuid=profile.uuid %}">
-                <div class="w-32 h-32 m-4  bg-blue-500 flex justify-center items-center flex-col rounded-md cursor-pointer">
+                <div class="w-32 h-32 m-4  bg-blue-500 flex justify-center items-center flex-col cursor-pointer">
                     <p class='text-6xl'>
                         {{profile.name | slice:":1"}}
                     </p>
@@ -40,4 +40,5 @@
     {% endif %} 
     
     </section>
+
 {% endblock content %}

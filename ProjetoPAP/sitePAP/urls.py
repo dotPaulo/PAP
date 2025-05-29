@@ -23,7 +23,7 @@ urlpatterns = [
     # Perfis
     path('profiles/', ProfileListView, name='profile_list'),
     path('profiles/create/', ProfileCreateView.as_view(), name='profile_create'),
-    path('profiles/delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),
+    path('profiles/delete/<uuid:profile_id>/', ProfileDeleteView.as_view(), name='profile_delete'),
     path("profile/edit/", ProfileEditSelection.as_view(), name = "profile_editSelection"),
     path("profile/edit/<uuid:profile_id>", ProfileEdit.as_view(), name = "profile_edit"),
     path('profile/<uuid:profile_uuid>/login/', profile_login, name='profile_login'),

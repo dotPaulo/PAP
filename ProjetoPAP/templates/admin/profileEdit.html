@@ -1,32 +1,38 @@
-{% extends "base.html" %}
+{% extends './base_dashboard.html' %}
+
 {% load static %}
 {% block page_title %}
     sitePAP - Editar Perfil
 {% endblock page_title %}
 
-
 {% block content %}
 
-    <div class="container bodyEdit">
+<div class="profile-container">
+    <!-- Botão de Voltar -->
+    <a href="{% url 'profile_editSelection' %}" class="btn-red">Voltar</a>
 
-                <form class='text-lg text-gray-200 font-medium mb-3 py-2' method = 'post'>
+    <!-- Formulário de Edição -->
+    <form method="post">
+        {% csrf_token %}
+        <h2>Alterações</h2>
 
-                    {% csrf_token %}
-                    
-                    <h2 class = 'py-2'>Alterações</h2>
-                    <label for="name">Nome do Perfil:</label>
-                    <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full my-3" type="text" name="name" id="id_name" placeholder="Nome do Perfil">
-                    
-                    <label for="options">Opções:</label>
-                    <select class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full"  name="age_limit" id="id_age_limit" >
-                        <option value='Administrador'>Administrador</option>
-                        <option value='Regular'>Professor</option>
-                    </select>
+        <label for="id_name">Nome do Perfil:</label>
+        <input type="text" name="name" id="id_name" placeholder="Nome do Perfil" required>
 
-                    <button class = 'px-4 my-4 rounded-md outline-none bg-primary_red bg-primary_red marginL' type="submit">Enviar</button>  
-                              
-                </form>
+        <label for="id_age_limit">Opções:</label>
+        <select name="age_limit" id="id_age_limit">
+            <option value="Administrador">Administrador</option>
+            <option value="Regular">Professor</option>
+        </select>
 
-    </div>
-
+        <div class="actions">
+            <button type="submit" class="btn-red">Enviar</button>
+            <form method="post" action="{% url 'profile_delete' profile_id=profile.uuid %}" 
+                  onsubmit="return confirm('Tem certeza que deseja excluir este perfil?');">
+                {% csrf_token %}
+                <button type="submit" class="btn-red">Deletar Perfil</button>
+            </form>
+        </div>
+    </form>
+</div>
 {% endblock content %}

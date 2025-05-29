@@ -1,4 +1,4 @@
-{% extends './partials/base_dashboard.html' %}
+{% extends 'admin/base_dashboard.html' %}
 {% load static %}
 
 {% block title %}Dashboard | sitePAP{% endblock %}
@@ -16,7 +16,7 @@
                 <div class="card-body">Total de utilizadores</div>
                 <h4 class="mb-3" style="margin-left: 15px;">{{ total_users }}</h4>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{% url 'profile_list' %}">Ver detalhes</a>
+                    <a class="small text-white stretched-link" href="{% url 'profile_editSelection' %}">Ver detalhes</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -34,4 +34,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock dashboard_content %}
