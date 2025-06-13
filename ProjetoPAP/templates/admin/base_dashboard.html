@@ -66,35 +66,31 @@
         </ul>
     </nav>
 
-    <!-- Sidebar e Conteúdo -->
-<div id="layoutSidenav">
+    <!-- Sidebar + Conteúdo -->
+    <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">INTERFACE</div>
-                        <a class="nav-link" href="">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt " style="color: #fff"></i>
-                            </div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt" style="color: #fff"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link" href="">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt " style="color: #fff"></i>
-                            </div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-line" style="color: #fff"></i></div>
                             Relatórios
                         </a>
+
                         <div class="sb-sidenav-menu-heading">GESTÃO</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                            aria-expanded="false" aria-controls="collapsePages">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="color: #fff"></i></div>
                             Utilizadores
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i>
-                            </div>
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link" href="{% url 'profile_editSelection' %}"> Utilizadores Registados</a>
+                                <a class="nav-link" href="{% url 'profile_editSelection' %}">Utilizadores Registados</a>
                                 <a class="nav-link" href="{% url 'profile_create' %}">Registar Utilizador</a>
                             </nav>
                         </div>
@@ -102,14 +98,18 @@
                 </div>
             </nav>
         </div>
-</div>
 
-    <!-- Scripts finais -->
+        <!-- Conteúdo Principal -->
+        <div id="layoutSidenav_content">
+            <main>
+                {% block dashboard_content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts Finais -->
     <script src="{% static 'assets/JS/dashboard.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="{% static 'assets/JS/chart-area-demo.js' %}"></script>
-    <script src="{% static 'assets/JS/chart-bar-demo.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-
 </body>
 </html>

@@ -1,31 +1,48 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block title %}
-    Netflix - Movie
-{% endblock title %}
 
-{% block content %}
+{% load static %}
 
-    <main class='bg-primary_black h-full w-full '>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        {{ movie|json_script:"movie_data" }}
-        
-        <video  controls class="w-full h-screen player "></video>
-        
-    </main>
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
 
-    <script>
-        const videoEl=document.querySelector('video')
-        const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
-        
-    
-        const url =new URL(location.href)
-        
-        const video_param = parseInt(url.searchParams.get("filme")) ? parseInt(url.searchParams.get("filme")) : 0
+  <title>sitePAP - Player</title>
 
-        videoEl.setAttribute('src',`http://localhost:8000/media/${movie_data[video_param].file}`)
-        videoEl.loop = true
-    </script>
-    
-    
-{% endblock content %}
+  <!-- CSS Principal -->
+  <link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}" />
+
+
+</head>
+<body class="bg-black text-gray-100 font-primary">
+<button onclick="window.history.back()" class="btn-voltar">Voltar</button>
+
+  <main class="bg-primary_black h-full w-full">
+    {{ movie|json_script:"movie_data"}}
+
+    <video controls controlsList="nodownload" class="w-full h-screen player"></video>
+  </main>
+
+  <footer class="...">
+    <!-- Exemplo de footer -->
+    <div class="container text-center py-4">
+      &copy; 2025 sitePAP. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <script>
+    const videoEl = document.querySelector('video');
+    const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
+
+    const url = new URL(location.href);
+    const video_param = parseInt(url.searchParams.get("filme")) ? parseInt(url.searchParams.get("filme")) : 0;
+
+    videoEl.setAttribute('src', `http://localhost:8000/media/${movie_data[video_param].file}`);
+    videoEl.loop = false;
+  </script>
+</body>
+</html>

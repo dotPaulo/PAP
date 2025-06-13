@@ -5,9 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
-from .models import Profile, Movie, CustomUser
-from .forms import MovieForm, CustomUserRegisterForm
+from .models import *
+from .forms import *
+
+User = get_user_model()
 
 
 # Home 
@@ -15,14 +18,23 @@ class Home(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('profile_list')
-        
+
         trending_movies = Movie.objects.order_by('-created')[:10]  # Pega os 10 filmes mais recentes
         return render(request, 'index.html', {'trending_movies': trending_movies})
 
-#Admin
+
+"""
+  FUNCIONALIDADES DO ADMINISTRADOR
+"""
+
+"""
+  Dashboard do Administrador 
+"""
+
+
 @login_required
 def admin_dashboard(request):
-    if request.user.username != 'administrador':
+    if request.user.username != 'administrador' and request.user.username != 'coordenador':
         return redirect('unauthorized')  # Crie uma view/template para acesso negado
 
     # Contar dados
@@ -36,8 +48,8 @@ def admin_dashboard(request):
     }
     return render(request, 'admin/dashboard.html', context)
 
-def dashboard_view(request):
 
+def dashboard_view(request):
     profile_count = Profile.objects.count()
     movie_count = Movie.objects.count()
 
@@ -47,6 +59,7 @@ def dashboard_view(request):
     }
 
     return render(request, 'dashboard.html', context)
+
 
 @login_required
 def register_custom_user(request):
@@ -62,31 +75,108 @@ def register_custom_user(request):
                 user=user,
                 name=form.cleaned_data['profile_name'],
                 role=form.cleaned_data['role'],
-                password=form.cleaned_data['password'],  
+                password=form.cleaned_data['password'],
             )
             return redirect('profile_list')  # ou onde quiser redirecionar após sucesso
     else:
         form = CustomUserRegisterForm()
-    return render(request, 'admin/profile_create.html', {'form': form})
+    return render(request, 'admin/profileCreate.html', {'form': form})
 
-#Profile
-def profile_login(request, profile_uuid):
-    profile = get_object_or_404(Profile, uuid=profile_uuid)
-    
-    if request.method == 'POST':
-        password = request.POST.get('password')
+def utilizadores_admin_view(request):
+    if request.user.username != 'administrador' and request.user.username != 'coordenador':
+        return redirect('unauthorized')  # Crie essa view/template
 
-        if check_password(password, profile.password):  # Verifica o hash
-            request.session['profile_access'] = str(profile.uuid)
-            return redirect('watch', profile_id=profile.uuid)
+    users = User.objects.all()
+    current_user_id = request.user.id
+
+    context = {
+        'users': users,
+        'current_user_id': current_user_id,
+    }
+    return render(request, 'admin/utilizadores.html', context)
+
+@login_required
+def apagar_utilizador(request, user_id):
+    if request.user.username != 'administrador' and request.user.username != 'coordenador':
+        return redirect('unauthorized')
+
+    if request.method == "POST":
+        user = get_object_or_404(User, id=user_id)
+        if user != request.user:
+            user.delete()
+            messages.success(request, "Utilizador apagado com sucesso.")
         else:
-            messages.error(request, 'Senha incorreta. Tente novamente.')
-    
-    return render(request, 'profile_login.html', {'profile': profile})
+            messages.error(request, "Não pode apagar o utilizador autenticado.")
+    return redirect('utilizadores_admin')
 
-def ProfileListView(request):
-    profiles = Profile.objects.all()
-    return render(request, 'profileList.html', {'profiles': profiles})
+@login_required
+def editar_utilizador(request, user_id):
+    if request.user.username != 'administrador' and request.user.username != 'coordenador':
+        return redirect('unauthorized')
+
+    user = get_object_or_404(User, id=user_id)
+    profile = get_object_or_404(Profile, user=user)
+
+    if request.method == 'POST':
+        # Use um formulário Django para edição se quiser (recomendado)
+        user.email = request.POST.get('email')
+        profile.role = request.POST.get('role')
+        user.save()
+        profile.save()
+        messages.success(request, "Utilizador atualizado com sucesso.")
+        return redirect('utilizadores_admin')
+
+    context = {
+        'user': user,
+        'profile': profile
+    }
+    return render(request, 'admin/profileEdit.html', context)
+
+
+"""
+    FUNCIONALIDADES DE FILMES
+"""
+
+
+class MovieListView(ListView):
+    model = Movie
+    template_name = 'movieList.html'
+    context_object_name = 'movies'
+
+
+class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Movie
+    form_class = MovieForm
+    template_name = 'movieCreate.html'
+    success_url = '/movies/'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+class MovieUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Movie
+    form_class = MovieForm
+    template_name = 'movieUpdate.html'
+    success_url = '/movies/'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Movie
+    template_name = 'movieDelete.html'
+    success_url = '/movies/'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+"""
+    FUNCIONALIDADES DE PERFIL
+"""
+
 
 class ProfileCreateView(LoginRequiredMixin, CreateView):
     model = Profile
@@ -107,6 +197,7 @@ class ProfileCreateView(LoginRequiredMixin, CreateView):
         self.request.user.profiles.add(profile)
         return redirect(self.success_url)
 
+
 class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Profile
     template_name = 'profileDelete.html'
@@ -114,12 +205,14 @@ class ProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-    
+
+
 class ProfileEditSelection(LoginRequiredMixin, View):
     def get(self, request):
         profiles = Profile.objects.all()
         return render(request, 'admin/profileEditSelection.html', {'profiles': profiles})
-        
+
+
 class ProfileEdit(LoginRequiredMixin, UpdateView):
     model = Profile
     fields = ['name', 'watch_later', 'favorites']
@@ -135,49 +228,69 @@ class ProfileEdit(LoginRequiredMixin, UpdateView):
         form.save()
         return redirect('profile_list')
 
-#Movie
-class MovieListView(ListView):
-    model = Movie
-    template_name = 'movieList.html'
-    context_object_name = 'movies'
 
-class MovieCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    model = Movie
-    form_class = MovieForm
-    template_name = 'movieCreate.html'
-    success_url = '/movies/'
+"""
+    FUNCIONALIDADES DE USUARIO
+"""
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+"""
+    FUNCIONALIDADES DE LOGIN DE PERFIL 
+"""
 
-class MovieUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Movie
-    form_class = MovieForm
-    template_name = 'movieUpdate.html'
-    success_url = '/movies/'
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+def profile_login(request, profile_uuid):
+    profile = get_object_or_404(Profile, uuid=profile_uuid)
 
-class MovieDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Movie
-    template_name = 'movieDelete.html'
-    success_url = '/movies/'
+    if request.method == 'POST':
+        password = request.POST.get('password')
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+        if check_password(password, profile.password):  # Verifica o hash
+            request.session['profile_access'] = str(profile.uuid)
+            return redirect('watch', profile_id=profile.uuid)
+        else:
+            messages.error(request, 'Senha incorreta. Tente novamente.')
 
-#Watch
-@method_decorator(login_required, name='dispatch')
+    return render(request, 'profile_login.html', {'profile': profile})
+
+
+def ProfileListView(request):
+    profiles = Profile.objects.all()
+    return render(request, 'profileList.html', {'profiles': profiles})
+
+
+# Watch
+class ShowMovie(View):
+    def get(self, request, movie_id, *args, **kwargs):
+        try:
+
+            movie = Movie.objects.get(uuid=movie_id)
+
+            movie = movie.videos.values()
+
+            return render(request, 'showMovie.html', {
+                'movie': list(movie)
+            })
+        except Movie.DoesNotExist:
+            return redirect('watch')
+
+class ShowMovieDetail(View):
+    def get(self,request,movie_id,*args, **kwargs):
+        try:
+
+            movie=Movie.objects.get(uuid=movie_id)
+
+            return render(request,'movieDetails.html',{
+                'movie':movie
+            })
+        except Movie.DoesNotExist:
+            return redirect('profile_list')
+
+
 class Watch(View):
     def get(self, request, profile_id, *args, **kwargs):
         try:
             profile = Profile.objects.get(uuid=profile_id)
         except Profile.DoesNotExist:
-            return redirect('profile_list')
-
-        # Verifica se o profile pertence ao user
-        if profile not in request.user.profiles.all():
             return redirect('profile_list')
 
         # Verifica se senha do profile foi validada
@@ -193,6 +306,7 @@ class Watch(View):
             'show_case': showcase,
             'profile': profile,
         })
+
 
 @login_required
 def add_to_watch_later(request, movie_id):
@@ -231,16 +345,3 @@ def add_to_favorites(request, movie_id):
     movie = get_object_or_404(Movie, pk=movie_id)
     profile.favorites.add(movie)
     return redirect('watch', profile_id=profile.uuid)
-
-# Handlers de erro
-def handler400(request, exception):
-    return render(request, 'errors/400.html', status=400)
-
-def handler403(request, exception):
-    return render(request, 'errors/403.html', status=403)
-
-def handler404(request, exception):
-    return render(request, 'errors/404.html', status=404)
-
-def handler500(request):
-    return render(request, 'errors/500.html', status=500)

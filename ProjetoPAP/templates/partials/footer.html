@@ -1,28 +1,54 @@
-<footer style="background-color: #000; color: #fff; padding: 3rem 5%; font-family: sans-serif;">
-  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; max-width: 1200px;">
-    <div style="flex: 1 1 200px;">
-      <a href="#" class="elemento" style="display: block; color: #b3b3b3;">Avisos Legais</a>
+
+<link rel="stylesheet" href="\static\assets\CSS\footer.css">
+
+<footer class="footer">
+  <div class="container">
+
+    <!-- LOGO à esquerda -->
+    <div class="footer-section footer-logo">
+      <a href="{% url 'home' %}">
+        <img src="\static\Imagens\LOGOAEFHP.png" alt="sitePAP">
+      </a>
     </div>
 
-    <div style="flex: 1 1 200px;">
-      <a href="#" class="elemento" style="display: block; color: #b3b3b3;">Contacte-nos</a>
+    <!-- Avisos Legais -->
+    <div class="footer-section">
+      <a href="#" class="footer-link">Avisos Legais</a>
     </div>
 
-    <div style="flex: 1 1 200px;">
-      <a href="{% url 'account_login' %}" class="elemento" style="display: block; margin-bottom: 0.5rem; color: #b3b3b3;">Iniciar Sessão</a>
+    <!-- Contacte-nos -->
+    <div class="footer-section">
+      <a href="#" class="footer-link">Contacte-nos</a>
     </div>
 
-    <div style="flex: 1 1 200px;">
-      <p style="font-weight: bold; margin-bottom: 1rem;">Redes</p>
-      <div style="display: flex; gap: 1rem;">
-        <a href="https://www.facebook.com/p/AE-Frei-Heitor-Pinto-100062937536508/?locale=pt_PT" style="color: #fff;"><ion-icon name="logo-facebook" size="large"></ion-icon></a>
-        <a href="https://www.instagram.com/aefhp/?hl=pt" style="color: #fff;"><ion-icon name="logo-instagram" size="large"></ion-icon></a>
-        <a href="http://aefhp.pt" style="color: #fff;"><ion-icon name="home-outline" size="large"></ion-icon></a>
+    <!-- Iniciar Sessão -->
+    <div class="footer-section">
+      <a href="{% url 'account_login' %}" class="footer-link">Iniciar Sessão</a>
+    </div>
+
+    <!-- Redes Sociais -->
+    <div class="footer-section">
+      <p class="footer-title">Redes</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/p/AE-Frei-Heitor-Pinto-100062937536508/?locale=pt_PT" target="_blank" rel="noopener">
+          <ion-icon name="logo-facebook" size="large"></ion-icon>
+        </a>
+        <a href="https://www.instagram.com/aefhp/?hl=pt" target="_blank" rel="noopener">
+          <ion-icon name="logo-instagram" size="large"></ion-icon>
+        </a>
+        <a href="http://aefhp.pt" target="_blank" rel="noopener">
+          <ion-icon name="home-outline" size="large"></ion-icon>
+        </a>
       </div>
     </div>
+
   </div>
 
-  <div style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-    <p style="margin-top: 1rem; font-size: 0.9rem;">sitePAP - Portugal</p>
+  <div class="footer-bottom">
+    <p>sitePAP - Portugal</p>
   </div>
 </footer>
+
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

@@ -101,7 +101,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  background-color: #f8f9fa;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -8653,6 +8653,10 @@ fieldset:disabled .btn {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-white-rgb), var(--bs-text-opacity)) !important;
 }
+.text-pass {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-black-rgb), var(--bs-text-opacity)) !important;
+}
 
 .text-body {
   --bs-text-opacity: 1;
@@ -12610,19 +12614,12 @@ body {
   border-radius: 0.375rem !important;
 }
 
-body {
-    background-color: #121212 !important;
-    color: #ffffff !important;
-}
-
 #layoutSidenav_content main {
-    background-color: #121212;
     min-height: 100vh;
     padding: 2rem;
 }
 
 .card {
-    background-color: #1e1e1e;
     border: none;
     color: #fff;
 }

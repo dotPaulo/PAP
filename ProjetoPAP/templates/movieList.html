@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-    Netflix 
+     sitePAP - Lista de Filmes
 {% endblock title %}
 
 
@@ -18,26 +18,13 @@
                 </p>
                 <div class="flex my-4">
                     <a href="{% url 'play' movie_id=show_case.uuid %}">
-                    
                         <button class="flex items-center bg-white py-2 px-5 rounded-md" style='color:grey;'>
                             <ion-icon name="play" class="text-2xl"></ion-icon>
-                            <span class="ml-3 font-medium " >
+                            <span class="ml-3 font-medium">
                                 Play
                             </span>
                         </button>
                     </a>
-
-                    <a href="{% url 'show_det' movie_id=show_case.uuid %}">
-                        <button class="ml-4 text-white flex items-center bg-gray-500 bg-opacity-80 py-2 px-5 rounded-md">
-                        
-                            <ion-icon name="information-circle-outline" class="text-2xl" ></ion-icon>
-                            <span class="ml-3 font-medium">
-                                More Info
-                            </span>
-                        </button>
-                    
-                    </a>
-    
                 </div>
             </div>
         </section> 
