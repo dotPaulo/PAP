@@ -22,7 +22,9 @@
 
     <!-- CSS Principal -->
     <link rel="stylesheet" href="{% static 'assets/CSS/dashboard.css' %}">
-
+    <link rel="stylesheet" href="{% static 'assets/CSS/create.css' %}">
+    
+    
     <!-- Dashboard & Datatables -->
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 
@@ -35,6 +37,8 @@
 
     <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
 
     {% block others %}{% endblock others %}
 </head>
@@ -58,7 +62,7 @@
                     <i class="fa-solid fa-user fa-xl" style="color: #fff;"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Editar informações da conta</a></li>
+                    <li><a class="dropdown-item" href="/../admin">Dashboard Master</a></li>
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
                 </ul>
@@ -73,25 +77,47 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">INTERFACE</div>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt" style="color: #fff"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-line" style="color: #fff"></i></div>
-                            Relatórios
-                        </a>
 
                         <div class="sb-sidenav-menu-heading">GESTÃO</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <!-- Utilizadores -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseUtilizadores" aria-expanded="false" aria-controls="collapseUtilizadores">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-users" style="color: #fff"></i></div>
                             Utilizadores
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link" href="{% url 'profile_editSelection' %}">Utilizadores Registados</a>
+                        <div class="collapse" id="collapseUtilizadores" aria-labelledby="headingUtilizadores" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionUtilizadores">
+                                <a class="nav-link" href="{% url 'profile_editSelection' %}">Editar Utilizadores</a>
                                 <a class="nav-link" href="{% url 'profile_create' %}">Registar Utilizador</a>
+                            </nav>
+                        </div>
+
+                        <!-- Filmes -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFilmes" aria-expanded="false" aria-controls="collapseFilmes">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-film" style="color: #fff"></i></div>
+                            Filmes
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseFilmes" aria-labelledby="headingFilmes" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionFilmes">
+                                <a class="nav-link" href="{% url 'movie_select' %}">Editar Filmes</a>
+                                <a class="nav-link" href="{% url 'movie_create' %}">Registar Filme</a>
+                            </nav>
+                        </div>
+
+                        <!-- Videos -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-film" style="color: #fff"></i></div>
+                            Videos
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseVideos" aria-labelledby="headingVideos" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionVideos">
+                                <a class="nav-link" href="{% url 'video_create' %}">Registar Video</a>
                             </nav>
                         </div>
                     </div>
@@ -113,3 +139,5 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
+{% include 'admin\partials\footer.html' %}
+

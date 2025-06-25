@@ -1,37 +1,28 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+<link rel="stylesheet" href="{% static 'assets/CSS/navbar.css' %}">
+<link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}">
 
-<nav class="flex items-center justify-between bg-gray-800 text-white py-3 px-5 fixed w-full z-50 shadow-md">
-    <!-- Logo -->
-    <div class="flex-shrink-0">
+<nav>
+    <!-- Esquerda: Logo -->
+    <div class="logo">
         <a href="{% url 'home' %}">
-            <img src="{% static 'Imagens/logo.png' %}" alt="sitePAP" class="w-28 md:w-36">
+            <img src="{% static 'Imagens/logo.png' %}" alt="sitePAP">
         </a>
     </div>
 
-    <!-- Direita: User e redes sociais -->
-    <div class="flex items-center space-x-4">
-       <!-- User Dropdown -->
-        {% if user.is_authenticated %}
-        <div class="relative group">
-            <button class="flex items-center nav-link focus:outline-none">
-                <span class="hidden sm:inline">{{ user.username }}</span>
-                <i class="fa-solid fa-user fa-lg ml-2"></i>
-            </button>
-            <div class="user-dropdown">
-                <form action="{% url 'account_logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-600">
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </div>
+    <!-- Direita: Ações do usuário -->
+    <div class="user-actions">
+        {% if user.is_authenticated and current_profile %}
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'profile_list' %}">
+                <i class="fas fa-sign-out-alt"></i> Perfis
+            </a>
         {% endif %}
-
-        <!-- Mobile menu (inativo por agora) -->
-        <button id="menu-toggle" class="md:hidden focus:outline-none">
-            <i class="fas fa-bars fa-xl"></i>
-        </button>
     </div>
 </nav>

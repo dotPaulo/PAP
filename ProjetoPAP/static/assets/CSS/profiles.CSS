@@ -1,0 +1,47 @@
+/* Estilo individual de cada card de perfil */
+.profile-card {
+  margin-right: 15px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: #f80000 0px 0px 10px rgba(255, 255, 255, 0.1);
+  border: 1px solid white;
+  width: 8rem; /* ou use Tailwind: w-32 */
+  height: 8rem;
+}
+
+.profile-card:hover {
+  transform: scale(1.05);
+  background-color: #fa4f4f;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Estilização para o primeiro caractere (se usado com classe custom) */
+.profile-card .initial {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Estilização para o nome (caso se use .name) */
+.profile-card .name {
+  color: #e5e7eb;
+}
+
+/* Estilização geral da seção (opcional se já estiver coberto por Tailwind) */
+.profiles-section {
+  background: linear-gradient(180deg, #111827, #1f2937);
+}
+
+/* Responsividade: tamanho menor nos cards para mobile */
+@media (max-width: 768px) {
+  .profile-card {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .profile-card p:first-child {
+    font-size: 2rem;
+  }
+
+  .profile-card p:last-child {
+    font-size: 0.85rem;
+  }
+}

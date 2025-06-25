@@ -1,0 +1,60 @@
+/* Estilo individual de cada card de perfil */
+.profile-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 8rem;
+  height: 8rem;
+  background-color: white;
+  border: 2px solid black;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  text-decoration: none; /* remove underline */
+}
+
+.profile-card:hover {
+  transform: scale(1.05);
+  background-color: #f3f4f6;
+}
+
+/* Estilização opcional */
+.profile-card p {
+  color: #111827;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none; /* garante que não sublinhe */
+}
+
+/* Layout geral: fundo branco */
+body {
+  background-color: white;
+}
+
+/* Grade centralizada */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 1.5rem;
+  max-width: 50rem;
+  margin: 2rem auto;
+  justify-items: center;
+}
+
+/* Responsividade para grid */
+@media (max-width: 768px) {
+  .profile-card {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .profile-card p {
+    font-size: 0.85rem;
+  }
+
+  .profile-grid {
+    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  }
+}

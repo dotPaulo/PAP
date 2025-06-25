@@ -13,7 +13,8 @@ MOVIE_TYPE = [
 
 ROLE = [
     ('Administrador', 'Administrador'),
-    ('Regular', 'Professor')
+    ('Regular', 'Professor'),
+    ('Coordenador', 'Coordenador'),
 ]
 
 class CustomUser(AbstractUser):
@@ -28,7 +29,9 @@ class Profile(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     watch_later = models.ManyToManyField('Movie', blank=True, related_name='watch_later_profiles')
     favorites = models.ManyToManyField('Movie', blank=True, related_name='favorite_profiles')
-    password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255,blank=True)
+    email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
+    user_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True, default='profile_pictures/avatardefault.jpg')
 
     def __str__(self):
         return f"{self.name}"
@@ -41,6 +44,8 @@ class Movie(models.Model):
     type = models.CharField(max_length=20, choices=MOVIE_TYPE)
     videos = models.ManyToManyField('Video')
     flyer = models.ImageField(upload_to='flyers', blank=True, null=True)
+    banner = models.ImageField(upload_to='banners', default='banners/defaultbanner.jpg')
+    trailer = models.FileField(upload_to='trailers', blank=True, null=True, default='trailers/defaulttrailer.mp4')
 
     def __str__(self):
         return self.title

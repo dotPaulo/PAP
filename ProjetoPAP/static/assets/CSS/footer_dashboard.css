@@ -1,0 +1,102 @@
+
+
+.footer {
+  width: 100%;
+  min-height: 69px;
+  background-color: #212529;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 90%;
+}
+
+.footer-text {
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 10px;
+}
+
+.footer-text .text {
+  cursor: pointer;
+}
+
+.text {
+  position: relative;
+  font-size: 18px;
+  color: white;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.cabecalho-text a::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: black;
+  transition: .3s;
+}
+
+.cabecalho-text a:hover::before {
+  width: 100%;
+}
+
+.footer-imagens {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.footer-confinanciado img {
+  max-width: 300px;
+}
+
+.highlight-text {
+  font-weight: bold;
+  color: initial;
+}
+
+.highlighted {
+  animation: highlightAnimation 1s forwards;
+}
+
+@keyframes highlightAnimation {
+  0% {
+    color: initial;
+  }
+
+  100% {
+    color: white;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .logo-footer {
+    width: 50px;
+  }
+
+  .confinanciado-footer {
+    width: 220px;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  .confinanciado-footer {
+    width: 180px;
+  }
+
+  .cabecalho-text,
+  .text {
+    font-size: 12px;
+  }
+
+}

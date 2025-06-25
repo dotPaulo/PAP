@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
+
+{% block content %}
+    <div class="p-4">
+        <h2 class="text-xl font-bold mb-4">Resultados para: "{{ query }}"</h2>
+
+        {% if results %}
+            <ul class="space-y-2">
+                {% for movie in results %}
+                    <li class="p-2 bg-pink-100 rounded">
+                        <a href="{% url 'show_det' movie_id=movie.uuid %}" class="movie-card">
+                            <div class="movie-thumb">
+                                <img src="{{ movie.flyer.url }}" alt="{{ movie.title }}" class="movie-img">
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhum resultado encontrado.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,33 +1,41 @@
-{% extends 'base.html' %}
+{% extends 'base_Wnavbar.html' %}
+
 {% load static %}
+
+{% block others %}
+<link rel="stylesheet" href="{% static 'assets/CSS/style.CSS' %}">
+    <link rel="stylesheet" href="{% static 'assets/CSS/profiles.CSS' %}">
+{% endblock others %}
 
 {% block title %}
     sitePAP - Perfis
 {% endblock title %}
 
 {% block content %}
-    
-    <section class='bg-primary_black min-h-screen py-20 md:py-0 flex-col flex justify-center items-center'>
-        <h2 class="text-center font-medium text-5xl my-4 text-gray-100">
-            Selecione um perfil.
-        </h2>
+<section class="bg-primary_black min-h-screen flex flex-col justify-center items-center">
+  <h2 class="text-center font-medium text-5xl my-4 text-gray-100">
+    Selecione um perfil.
+  </h2>
 
-        <div class="flex flex-wrap justify-center items-center w-10/12  md:w-6/12">
-
-        {% for profile in profiles %}
-            <a href="{% url 'profile_login' profile_uuid=profile.uuid %}">
-                <div class="w-32 h-32 m-4  bg-blue-500 flex justify-center items-center flex-col cursor-pointer">
-                    <p class='text-6xl'>
-                        {{profile.name | slice:":1"}}
-                    </p>
-                    <p class='text-lg'>
-                        {{profile.name}}
-                    </p>
-                </div>
-            </a>
-        {% endfor %}
-
+<div class="flex flex-wrap justify-center gap-6 p-4 max-w-6xl mx-auto">  
+    {% for profile in profiles %}
+      <a href="{% url 'profile_login' profile_uuid=profile.uuid %}" class="group no-underline">
+        <div class="profile-card bg-blue-600 hover:bg-blue-700 transition-all rounded-xl shadow-lg flex justify-center items-center flex-col cursor-pointer">
+          <p class="text-6xl text-white group-hover:text-red-500 transition-colors">
+            {{ profile.name|slice:":1" }}
+          </p>
+          <p class="text-lg text-white group-hover:text-red-500 transition-colors">
+            {{ profile.name }}
+          </p>
         </div>
-    </section>
+      </a>
+    {% endfor %}
+  </div>
+</section>
 
+{% if not profiles %}
+  <div class="flex justify-center items-center w-full h-full">
+    <p class="text-gray-500">Nenhum perfil disponível.</p>
+  </div>
+{% endif %}
 {% endblock content %}

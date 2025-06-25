@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Página não encontrada - 404</title>
+    <link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}">
+    <style>
+        body {
+            background: #181818;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .error-container {
+            text-align: center;
+            margin-top: 10vh;
+        }
+        .error-code {
+            font-size: 7rem;
+            font-weight: bold;
+            color: #e50914;
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+        .back-link {
+            color: #e50914;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 2px solid #e50914;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .back-link:hover {
+            background: #e50914;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <div class="error-message">Página não encontrada</div>
+        <a href="{% url 'home' %}" class="back-link">Voltar para o início</a>
+    </div>
+</body>
+</html>

@@ -1,38 +1,79 @@
-{% extends './base_dashboard.html' %}
-
+{% extends 'admin/base_dashboard.html' %}
 {% load static %}
+
 {% block page_title %}
     sitePAP - Editar Perfil
 {% endblock page_title %}
 
-{% block content %}
+{% block dashboard_content %}
+<section>
+    <div class="flex">
+        <form method="post" class="filme-form">
+            {% csrf_token %}
+            <h2 class="form-title">Alterações</h2>
 
-<div class="profile-container">
-    <!-- Botão de Voltar -->
-    <a href="{% url 'profile_editSelection' %}" class="btn-red">Voltar</a>
+            <div class="form-group">
+                <label for="id_name">Nome do Perfil:</label>
+                <input type="text" name="name" id="id_name" value="{{ form.name.value }}" placeholder="Nome do Perfil">
+            </div>
 
-    <!-- Formulário de Edição -->
-    <form method="post">
-        {% csrf_token %}
-        <h2>Alterações</h2>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" name="email" id="email" value="{{ form.email.value }}" placeholder="Email (Opcional)">
+            </div>
 
-        <label for="id_name">Nome do Perfil:</label>
-        <input type="text" name="name" id="id_name" placeholder="Nome do Perfil" required>
+            <div class="form-group password-group">
+                <label for="password">Senha</label>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" placeholder="Senha (Opcional)">
+                    <button type="button" id="togglePassword" class="toggle-password" tabindex="-1">
+                        👁️
+                    </button>
+                </div>
+            </div>
 
-        <label for="id_age_limit">Opções:</label>
-        <select name="age_limit" id="id_age_limit">
-            <option value="Administrador">Administrador</option>
-            <option value="Regular">Professor</option>
-        </select>
+            <div class="form-group">
+                <label for="id_role">Opções:</label>
+                <select name="role" id="id_role">
+                    <option value="Administrador" {% if form.role.value == "Administrador" %}selected{% endif %}>Administrador</option>
+                    <option value="Coordenador" {% if form.role.value == "Coordenador" %}selected{% endif %}>Coordenador</option>
+                    <option value="Regular" {% if form.role.value == "Regular" %}selected{% endif %}>Professor</option>
+                </select>
+            </div>
 
-        <div class="actions">
-            <button type="submit" class="btn-red">Enviar</button>
-            <form method="post" action="{% url 'profile_delete' profile_id=profile.uuid %}" 
-                  onsubmit="return confirm('Tem certeza que deseja excluir este perfil?');">
-                {% csrf_token %}
-                <button type="submit" class="btn-red">Deletar Perfil</button>
-            </form>
-        </div>
-    </form>
-</div>
-{% endblock content %}
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: 
+                                {% if error == "This field is required." %}
+                                    Este campo é obrigatório.
+                                {% elif error == "Enter a valid email address." %}
+                                    Insira um email válido.
+                                {% else %}
+                                    {{ error }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>
+                            {% if error == "The two password fields didn’t match." %}
+                                As duas senhas não coincidem.
+                            {% else %}
+                                {{ error }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-actions form-buttons" style="display: flex; gap: 10px;">
+                <button type="submit" name="save" style="background-color: #007bff; color: white;">Salvar Alterações</button>
+                <button type="submit" name="delete" value="1" style="background-color: #dc3545; color: white;">Deletar Perfil</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock dashboard_content %}

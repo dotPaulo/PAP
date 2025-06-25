@@ -1,7 +1,5 @@
 {% load static %}
 
-{% load static %}
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,34 +13,216 @@
 
   <!-- CSS Principal -->
   <link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}" />
-
-
+  <style>
+    body {
+      background: #181818;
+      color: #fff;
+    }
+    .custom-player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 90vh;
+      width: 100vw;
+    }
+    .custom-video {
+      width: 80vw;
+      max-width: 900px;
+      border-radius: 1rem 1rem 0 0;
+      background: #000;
+      box-shadow: 0 8px 32px #000a;
+    }
+    .controls {
+      width: 80vw;
+      max-width: 900px;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 8px 32px #000a;
+    }
+    .control-btn {
+      background: #e50914;
+      border: none;
+      color: #fff;
+      font-size: 1.3rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .control-btn:hover {
+      background: #b0060f;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+      margin: 0 1rem;
+    }
+    .progress {
+      background: #e50914;
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .time {
+      font-size: 0.95rem;
+      min-width: 60px;
+      text-align: center;
+      color: #fff;
+    }
+    .volume-slider {
+      width: 80px;
+      accent-color: #e50914;
+    }
+    @media (max-width: 900px) {
+      .custom-video, .controls {
+        width: 98vw;
+        max-width: 100vw;
+      }
+    }
+  </style>
 </head>
-<body class="bg-black text-gray-100 font-primary">
-<button onclick="window.history.back()" class="btn-voltar">Voltar</button>
-
-  <main class="bg-primary_black h-full w-full">
+<body>
+  <main>
+    {% include 'partials/navbar_logged.html' %}
     {{ movie|json_script:"movie_data"}}
-
-    <video controls controlsList="nodownload" class="w-full h-screen player"></video>
+    <div class="custom-player-container">
+      <video id="custom-video" class="custom-video" preload="metadata"></video>
+      <div class="controls">
+        <button class="control-btn" id="play-pause" title="Play/Pause">
+          <span id="play-icon">&#9654;</span>
+          <span id="pause-icon" style="display:none">&#10073;&#10073;</span>
+        </button>
+        <span class="time" id="current-time">00:00</span>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+        <span class="time" id="duration">00:00</span>
+        <input type="range" min="0" max="1" step="0.01" value="1" id="volume" class="volume-slider" title="Volume">
+        <button class="control-btn" id="fullscreen" title="Tela cheia">&#x26F6;</button>
+        <button class="control-btn" id="pip-btn" title="Moldura (Picture-in-Picture)">&#128247;</button>
+      </div>
+    </div>
   </main>
 
-  <footer class="...">
-    <!-- Exemplo de footer -->
-    <div class="container text-center py-4">
-      &copy; 2025 sitePAP. Todos os direitos reservados.
+  <footer>
+    <div class="container text-center py-4" style="color:#fff;">
+      &copy; 2025 Todos os direitos reservados.
     </div>
   </footer>
 
   <script>
-    const videoEl = document.querySelector('video');
+    const videoEl = document.getElementById('custom-video');
     const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
-
     const url = new URL(location.href);
     const video_param = parseInt(url.searchParams.get("filme")) ? parseInt(url.searchParams.get("filme")) : 0;
+    videoEl.src = `http://localhost:8000/media/${movie_data[video_param].file}`;
 
-    videoEl.setAttribute('src', `http://localhost:8000/media/${movie_data[video_param].file}`);
-    videoEl.loop = false;
+    // Custom Controls
+    const playPauseBtn = document.getElementById('play-pause');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const progressBar = document.getElementById('progress-bar');
+    const progress = document.getElementById('progress');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volume');
+    const fullscreenBtn = document.getElementById('fullscreen');
+    const pipBtn = document.getElementById('pip-btn');
+
+    function formatTime(time) {
+      if (isNaN(time)) return "00:00";
+      const min = Math.floor(time / 60).toString().padStart(2, '0');
+      const sec = Math.floor(time % 60).toString().padStart(2, '0');
+      return `${min}:${sec}`;
+    }
+
+    // Atualiza duração assim que possível
+    function updateDuration() {
+      durationEl.textContent = formatTime(videoEl.duration);
+    }
+
+    videoEl.addEventListener('loadedmetadata', () => {
+      updateDuration();
+      currentTimeEl.textContent = formatTime(videoEl.currentTime);
+    });
+
+    // Atualiza duração caso carregue depois
+    videoEl.addEventListener('durationchange', updateDuration);
+
+    videoEl.addEventListener('timeupdate', () => {
+      currentTimeEl.textContent = formatTime(videoEl.currentTime);
+      const percent = (videoEl.currentTime / videoEl.duration) * 100;
+      progress.style.width = percent + '%';
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      if (videoEl.paused) {
+        videoEl.play();
+      } else {
+        videoEl.pause();
+      }
+    });
+
+    videoEl.addEventListener('play', () => {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = '';
+    });
+
+    videoEl.addEventListener('pause', () => {
+      playIcon.style.display = '';
+      pauseIcon.style.display = 'none';
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      videoEl.currentTime = percent * videoEl.duration;
+    });
+
+    volumeSlider.addEventListener('input', () => {
+      videoEl.volume = volumeSlider.value;
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (videoEl.requestFullscreen) {
+        videoEl.requestFullscreen();
+      } else if (videoEl.webkitRequestFullscreen) {
+        videoEl.webkitRequestFullscreen();
+      } else if (videoEl.msRequestFullscreen) {
+        videoEl.msRequestFullscreen();
+      }
+    });
+
+    // Picture-in-Picture (Moldura)
+    pipBtn.addEventListener('click', async () => {
+      if ('pictureInPictureEnabled' in document) {
+        try {
+          if (document.pictureInPictureElement) {
+            await document.exitPictureInPicture();
+          } else {
+            await videoEl.requestPictureInPicture();
+          }
+        } catch (err) {
+          alert('Não foi possível ativar o modo moldura.');
+        }
+      } else {
+        alert('Seu navegador não suporta Picture-in-Picture.');
+      }
+    });
   </script>
 </body>
 </html>

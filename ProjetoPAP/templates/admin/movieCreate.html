@@ -1,0 +1,65 @@
+{% extends 'admin\base_dashboard.html' %}
+{% load static %}
+{% block title %}
+    sitePAP - Criar Filme
+{% endblock title %}
+
+{% block dashboard_content %}
+
+<section class="py-5 px-4">
+  <div class="flex flex-wrap justify-center">
+    <form method='POST' enctype="multipart/form-data" class="filme-form">
+        <h1 class="form-title">Criar Filme</h1>
+        {% csrf_token %}
+        {{ form.errors }}
+
+        <div class="form-group">
+            <label for="id_title">Título</label>
+            <input required type="text" name="title" id="id_title" placeholder="Título do Filme">
+        </div>
+
+        <div class="form-group">
+            <label for="id_description">Descrição</label>
+            <textarea required name="description" id="id_description" rows="4" placeholder="Descrição do filme"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="id_type">Tipo</label>
+            <select required name="type" id="id_type">
+                <option value="">Selecione...</option>
+                {% for key, value in form.fields.type.choices %}
+                    {% if key %}
+                        <option value="{{ key }}">{{ value }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="id_flyer">Flyer</label>
+            <input type="file" name="flyer" id="id_flyer">
+        </div>
+
+        <div class="form-group">
+            <label for="banner">Banner</label>
+            <input type="file" name="banner" id="banner" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label for="id_videos">Vídeos</label>
+            <select name="videos" id="id_videos">
+                {% for value, label in form.videos.field.choices %}
+                    <option value="{{ value }}" {% if form.videos.value == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Criar Filme</button>
+        </div>
+    </form>
+
+  </div>
+</section>
+<script src="{% static 'assets\JS\sweetAlert.js' %}"></script>
+{% endblock dashboard_content %}

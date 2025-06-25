@@ -1,19 +1,29 @@
 from django import forms
-from .models import Movie, Profile, ROLE
+from .models import Movie, Video, ROLE
 from django.contrib.auth import get_user_model
 
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['title', 'description', 'type', 'videos', 'flyer']
+        fields = ['title', 'description', 'type', 'flyer', 'banner', 'videos']
+
+
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['titulo', 'file'] 
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 CustomUser = get_user_model()
 
 class CustomUserRegisterForm(forms.Form):
     username = forms.CharField(max_length=150, required=True, label="Nome de utilizador")
-    email = forms.EmailField(required=True, label="Email")
-    password = forms.CharField(widget=forms.PasswordInput, required=True, label="Password")
-    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirmar Password")
+    email = forms.EmailField(required=False, label="Email")
+    password = forms.CharField(widget=forms.PasswordInput, required=False, label="Password")
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False, label="Confirmar Password")
     profile_name = forms.CharField(max_length=50, required=True, label="Nome do Perfil")
     role = forms.ChoiceField(choices=ROLE, required=True, label="Cargo")
 

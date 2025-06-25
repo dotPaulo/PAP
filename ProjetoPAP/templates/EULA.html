@@ -1,0 +1,149 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avisos Legais - EULA</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
+
+
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    main.content {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      color: #e50914;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p, li {
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    a {
+      color: #e50914;
+      text-decoration: none;
+    }
+
+  </style>
+
+  <!-- CSS do Footer -->
+  <link rel="stylesheet" href="\static\assets\CSS\footer.css">
+</head>
+<body>
+
+  <main class="content">
+    <h1>Contrato de Licença de Usuário Final (EULA)</h1>
+
+    <h2>1. Definições</h2>
+    <p><strong>1.1.</strong> “Plataforma” refere-se ao site e serviços digitais disponibilizados para visualização de vídeos educacionais.</p>
+    <p><strong>1.2.</strong> “Usuário” refere-se à pessoa física ou jurídica que acessa e utiliza a Plataforma.</p>
+    <p><strong>1.3.</strong> “Conteúdo” significa todos os vídeos, materiais, recursos multimídia e demais informações disponibilizadas na Plataforma.</p>
+
+    <h2>2. Aceitação dos Termos</h2>
+    <p>Ao acessar ou utilizar a Plataforma, o Usuário concorda em estar vinculado a este Contrato de Licença de Usuário Final, bem como às demais políticas e termos publicados pela Plataforma.</p>
+
+    <h2>3. Licença de Uso</h2>
+    <p><strong>3.1.</strong> A Plataforma concede ao Usuário uma licença limitada, não exclusiva, intransferível e revogável para acessar e utilizar o Conteúdo exclusivamente para fins educacionais e não comerciais.</p>
+    <p><strong>3.2.</strong> O Usuário não poderá modificar, copiar, distribuir, transmitir, exibir, executar, reproduzir, publicar, licenciar, criar obras derivadas, transferir ou vender quaisquer informações, software, produtos ou serviços obtidos pela Plataforma.</p>
+
+    <h2>4. Restrições de Uso</h2>
+    <p><strong>4.1.</strong> É expressamente proibido:</p>
+    <ul>
+      <li>Utilizar a Plataforma para fins ilegais, fraudulentos ou que violem direitos de terceiros.</li>
+      <li>Compartilhar sua conta com terceiros ou permitir acessos não autorizados.</li>
+      <li>Baixar, extrair ou capturar o Conteúdo sem autorização prévia e expressa da Plataforma.</li>
+      <li>Realizar engenharia reversa, descompilar ou tentar acessar o código-fonte da Plataforma.</li>
+    </ul>
+
+    <h2>5. Privacidade e Dados</h2>
+    <p><strong>5.1.</strong> O uso da Plataforma está sujeito à Política de Privacidade disponível no site, que explica como os dados do Usuário são coletados, usados e protegidos.</p>
+    <p><strong>5.2.</strong> O Usuário concorda com o tratamento de seus dados pessoais conforme descrito na Política de Privacidade.</p>
+
+    <h2>6. Limitação de Responsabilidade</h2>
+    <p><strong>6.1.</strong> A Plataforma é fornecida “no estado em que se encontra”, sem garantias expressas ou implícitas.</p>
+    <p><strong>6.2.</strong> A Plataforma não será responsável por quaisquer danos diretos, indiretos, incidentais, consequenciais ou punitivos decorrentes do uso ou da incapacidade de uso da Plataforma ou do Conteúdo.</p>
+
+    <h2>7. Término</h2>
+    <p><strong>7.1.</strong> A Plataforma reserva-se o direito de suspender ou encerrar o acesso do Usuário a qualquer momento, especialmente em caso de violação deste EULA.</p>
+    <p><strong>7.2.</strong> O término da licença não exime o Usuário das obrigações decorrentes do uso prévio da Plataforma.</p>
+
+    <h2>8. Disposições Gerais</h2>
+    <p><strong>8.1.</strong> Este EULA constitui o acordo completo entre o Usuário e a Plataforma.</p>
+    <p><strong>8.2.</strong> Caso qualquer cláusula deste contrato seja considerada inválida, as demais permanecerão em pleno vigor.</p>
+    <p><strong>8.3.</strong> Este contrato será regido pelas leis aplicáveis no país da Plataforma.</p>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-section footer-logo">
+        <a href="{% url 'home' %}">
+          <img src="\static\Imagens\LOGOAEFHP.png" alt="sitePAP">
+        </a>
+      </div>
+      <div class="footer-section">
+        <a href="{% url 'eula' %}" class="footer-link">Avisos Legais</a>
+      </div>
+      <div class="footer-section">
+        <a href="{% url 'account_login' %}" class="footer-link">Iniciar Sessão</a>
+      </div>
+      <div class="footer-section">
+        <p class="footer-title">Redes</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/p/AE-Frei-Heitor-Pinto-100062937536508/?locale=pt_PT" target="_blank" rel="noopener">
+            <ion-icon name="logo-facebook" size="large"></ion-icon>
+          </a>
+          <a href="https://www.instagram.com/aefhp/?hl=pt" target="_blank" rel="noopener">
+            <ion-icon name="logo-instagram" size="large"></ion-icon>
+          </a>
+          <a href="http://aefhp.pt" target="_blank" rel="noopener">
+            <ion-icon name="home-outline" size="large"></ion-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>sitePAP - Portugal</p>
+    </div>
+  </footer>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+/* custom.css */
+
+:root {
+    --primary-black: #0d0d0d;
+    --primary-red: #e50914;
+    --primary-white: #ffffff;
+    --text-muted: #cccccc;
+}
+
+body {
+    margin-top: 50px;
+    background-color: var(--primary-black);
+    color: var(--primary-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Scrollbar para a lista de filmes */
+.movie-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.movie-list::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 10px;
+}
+
+.movie-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Efeito de foco ao passar o mouse no card */
+.movie-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+}
+
+/* Botão Play */
+.btn-play {
+    background-color: var(--primary-white);
+    color: var(--primary-black);
+    transition: background-color 0.2s ease;
+}
+
+.btn-play:hover {
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+}
+
+/* Texto secundário */
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Fundo com gradiente escuro para legibilidade sobre imagens */
+.hero-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+}
+
+/* Container principal */
+.main-container {
+    background-color: var(--primary-black);
+    min-height: 100vh;
+    width: 100%;
+    color: var(--primary-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* HERO Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .hero-section {
+        padding: 3rem;
+    }
+}
+
+.hero-content {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    max-width: 48rem;
+}
+
+@media (min-width: 768px) {
+    .hero-content {
+        padding: 2rem;
+    }
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3.75rem;
+    }
+}
+
+.hero-description {
+    font-size: 1rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .hero-description {
+        font-size: 1.125rem;
+    }
+}
+
+.icon-play {
+    font-size: 1.25rem;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+/* Popular Section */
+.popular-section {
+    background-color: var(--primary-black);
+    padding: 3rem 0;
+}
+
+.container {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--primary-white);
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 1.875rem;
+    }
+}
+
+/* Para garantir no máximo 5 por linha */
+@media (min-width: 1200px) {
+    .movie-list-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.movie-list-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Exatamente 5 colunas */
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+/* Scrollbar já definido, será aplicado automaticamente */
+
+/* Movie Card */
+.movie-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+}
+
+.movie-thumb {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    aspect-ratio: 2/3; /* Mantém proporção de pôster */
+}
+
+.movie-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay escondido por padrão */
+.movie-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.3s ease;
+}
+
+/* Mostrar overlay ao passar o mouse */
+.movie-thumb:hover .movie-overlay {
+    opacity: 1;
+}
+
+/* Botões dentro do overlay */
+.overlay-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-white);
+    color: var(--primary-black);
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.overlay-btn:hover {
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+}

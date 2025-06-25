@@ -89,7 +89,7 @@ hr {
     }
 
     .footer-logo {
-        margin-bottom: 1.5rem;
+        display: none;
     }
 
     .footer-bottom {
