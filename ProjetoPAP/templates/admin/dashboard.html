@@ -2,7 +2,16 @@
 
 {% block title %}Dashboard | sitePAP{% endblock %}
 
+
 {% block dashboard_content %}
+
+
+{% if messages %}
+  {% for message in messages %}
+    <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+  {% endfor %}
+{% endif %}
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Bem-vindo/a {{ request.user.username }}!</h1>
     <ol class="breadcrumb mb-4">
@@ -12,7 +21,7 @@
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-danger text-white mb-4">
-                <div class="card-body">Total de utilizadores</div>
+                <div class="card-body">Utilizadores</div>
                 <h4 class="mb-3" style="margin-left: 15px;">{{ total_users }}</h4>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="{% url 'profile_editSelection' %}">Ver detalhes</a>
@@ -23,10 +32,32 @@
 
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
-                <div class="card-body">Total de filmes</div>
-                <h4 class="mb-3" style="margin-left: 15px;">{{ total_movies|default:"0" }}</h4>
+                <div class="card-body">Fichas Técnicas</div>
+                <h4 class="mb-3" style="margin-left: 15px;">{{ total_movies }}</h4>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="{% url 'movie_select' %}">Ver detalhes</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-secondary text-white mb-4">
+                <div class="card-body">Categorias</div>
+                <h4 class="mb-3" style="margin-left: 15px;">{{ total_categories|default:"0" }}</h4>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'category_create' %}">Ver detalhes</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info text-white mb-4">
+                <div class="card-body">Videos</div>
+                <h4 class="mb-3" style="margin-left: 15px;">{{ total_videos|default:"0" }}</h4>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'video_create' %}">Ver detalhes</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

@@ -9,6 +9,15 @@ section {
     color: white;
 }
 
+.dark-container {
+    background: #23272b;         /* Cor escura */
+    border-radius: 18px;         /* Bordas arredondadas */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); /* Sombra suave */
+    padding: 40px 32px;
+    max-width: 600px;
+    margin: 40px auto;
+}
+
 /* Container flex para garantir compatibilidade */
 .flex {
     width: 100%;
@@ -131,4 +140,8 @@ ul.errorlist {
 
 .toggle-password:hover {
     color: #adb5bd;
+}
+
+body, input, textarea, select, button {
+    font-family: 'Montserrat', Arial, sans-serif;
 }

@@ -35,8 +35,14 @@ urlpatterns = [
     path('movie/detail/<str:movie_id>/',ShowMovieDetail.as_view(),name='show_det'),
     path('movie/category/<str:category>/',category_movies,name='show_movie_category'),
 
+    # Categorias
+    path('category/edit/', CategoryEditView.as_view(), name='category_edit'),
+    path('category/create/', CategoryCreateView.as_view(), name='category_create'),
+
+    
     # Videos
     path('videos/create/', VideoCreateView.as_view(), name='video_create'),
+    path('videos/edit/', VideoEditView.as_view(), name='video_edit'),
 
 
     # Ações do usuário

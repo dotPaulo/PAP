@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
 
     <title>
         sitePAP - lista de Filmes
@@ -17,7 +19,12 @@
 
 <main class="main-container">
 
-    <link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+        {% endfor %}
+    {% endif %}
 
     <!-- Biblioteca de Filmes -->
     <section class="popular-section">
