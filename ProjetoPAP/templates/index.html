@@ -3,21 +3,18 @@
 {% load static %}
 
 {% block title %}
-    sitePAP - Home
+    AulaPlay - Home
 {% endblock title %}
 
 {% block others %}
-    <!-- Adicione isso para garantir que o SweetAlert funcione -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
 {% endblock others %}
-    
 
 {% block content %}
 
-
-<header class="background min-h-screen bg-black bg-opacity-75 showcase border-b-8 flex justify-center items-center bg-no-repeat"  
-    style="background-image: url('{% static 'Imagens/background_netflix.jpg' %}');">
+<header class="background min-h-screen bg-black bg-opacity-80 showcase border-b-8 flex justify-center items-center bg-no-repeat"
+    style="background-image: url('{% static 'Imagens/background_netflix.jpg' %}'); background-size: cover; background-position: center;">
     
     {% if messages %}
         {% for message in messages %}
@@ -25,22 +22,21 @@
         {% endfor %}
     {% endif %}
 
-
     <div class="z-10 h-full py-32 md:py-0 text-gray-100 text-center flex items-center flex-col">
-        <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center">
+        <h1 class="font-semibold text-4xl md:text-5xl w-10/12 md:w-3/4 text-center" style="font-family: 'Open Sans', Arial, Helvetica, sans-serif; letter-spacing: 1px;">
             Uma forma mais fácil de ensinar!
         </h1>
-        <h3 class="text-xl md:text-xl py-5">
+        <h3 class="text-xl md:text-xl py-5" style="font-family: 'Open Sans', Arial, Helvetica, sans-serif;">
             Utilize filmes para facilitar o seu ensino e prender a atenção dos alunos!
         </h3>
-        <h4 class="text-sm md:text-lg pb-3">
+        <h4 class="text-sm md:text-lg pb-3" style="font-family: 'Open Sans', Arial, Helvetica, sans-serif;">
             Aceda ao seu perfil de professor para começar!
         </h4>
 
         <div class="w-full flex justify-center">
             <div class="flex justify-center items-center w-11/12 md:w-10/12">
-                <a href="{% url 'profile_list' %}" class="md:w-1/4">             
-                    <button class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
+                <a href="{% url 'profile_list' %}" class="md:w-1/4">
+                    <button class="btn-netflix" style="background: #e50914; color: #fff; border-radius: 4px; font-weight: 600; font-size: 1.1rem; padding: 0.75rem 2.5rem; box-shadow: 0 2px 8px 0 rgba(0,0,0,0.15); transition: background 0.2s;">
                         <span>Começar</span>
                     </button>
                 </a>
@@ -48,4 +44,5 @@
         </div>
     </div>
 </header>
+<div class="fade-footer"></div>
 {% endblock content %}

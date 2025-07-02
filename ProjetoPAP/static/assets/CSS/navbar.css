@@ -18,12 +18,25 @@ nav {
     width: 100%;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    height: 70px; /* Altura fixa da navbar */
+    overflow: visible; /* Permite a logo sair da navbar */
 }
 
 /* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
 .logo img {
-    height: 36px;
+    position: static; /* Remove o absolute */
+    height: 150px;
+    width: auto;
+    max-height: none;
+    z-index: 1001;
     transition: transform 0.3s ease;
+    /* Opcional: sombra para destacar */
+    filter: drop-shadow(0 2px 8px #0008);
 }
 .logo img:hover {
     transform: scale(1.05);

@@ -1,5 +1,5 @@
 """
-ASGI config for sitePAP project.
+ASGI config for AulaPlay project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
