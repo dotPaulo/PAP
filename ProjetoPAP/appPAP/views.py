@@ -1,6 +1,5 @@
 from typing import Self
 from urllib import request
-from typing import Self
 from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -54,12 +53,8 @@ class EULA(View):
 def admin_dashboard(request):
     if not request.user.groups.filter(name__in=['Administrador', 'Coordenador']).exists():
         return render(request, '404.html')
-<<<<<<< HEAD
     if not request.user.groups.filter(name__in=['Administrador', 'Coordenador']).exists():
         return render(request, '404.html')
-=======
-    
->>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f
 
     # Contar dados
     total_users = Profile.objects.count()
@@ -606,17 +601,15 @@ def search_results(request):
     except Exception:
         return render(request, '404.html')
 
-<<<<<<< HEAD
 def all_categories(request):
     categories = []
-    for value, label in MOVIE_TYPE:
-        banner_movie = Movie.objects.filter(type=value).first()
-        if banner_movie:
-            categories.append({
-                'name': label,
-                'slug': value,  # value será usado na URL
-                'banner_movie': banner_movie,
-            })
+    for category in Category.objects.all():
+        banner_movie = category.movies.first()  # pega o primeiro filme da categoria
+        categories.append({
+            'name': category.name,
+            'slug': str(category.uuid),  # ou category.name, se preferir
+            'banner_movie': banner_movie,
+        })
     return render(request, 'all_categories.html', {'categories': categories})
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -654,7 +647,6 @@ def video_edit(request):
         'form': form,
         'selected_video': selected_video,
     })
-=======
 
 
 """
@@ -726,4 +718,3 @@ class CategoryEditView(UserPassesTestMixin, View):
     def test_func(self):
 
         return self.request.user.is_staff or self.request.user.is_superuser
->>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f

@@ -5,20 +5,11 @@
 
 {% block dashboard_content %}
 
-<<<<<<< HEAD
     {% if messages %}
         {% for message in messages %}
             <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
         {% endfor %}
     {% endif %}
-=======
-
-{% if messages %}
-  {% for message in messages %}
-    <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
-  {% endfor %}
-{% endif %}
->>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Bem-vindo/a {{ request.user.username }}!</h1>
@@ -65,7 +56,7 @@
                 <div class="card-body">Videos</div>
                 <h4 class="mb-3" style="margin-left: 15px;">{{ total_videos|default:"0" }}</h4>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{% url 'video_create' %}">Ver detalhes</a>
+                    <a class="small text-white stretched-link" href="{% url 'video_edit' %}">Ver detalhes</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

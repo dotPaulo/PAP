@@ -5,9 +5,14 @@ footer {
     padding: 2rem 0 1rem 0;
 }
 .footer-logo img {
-    width: 120px;
-    height: auto;
-    filter: brightness(1.1);
+    position: static; /* Remove o absolute */
+    height: 150px;
+    width: auto;
+    max-height: none;
+    z-index: 1001;
+    transition: transform 0.3s ease;
+    /* Opcional: sombra para destacar */
+    filter: drop-shadow(0 2px 8px #0008);
 }
 
 /* Gradiente de transição para o footer */
