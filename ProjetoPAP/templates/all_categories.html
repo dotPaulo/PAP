@@ -1,0 +1,173 @@
+{% load static %}
+
+{% include 'partials/navbar_logged.html' %}
+
+<div class="content-wrapper">
+    <link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
+
+    <title>sitePAP - Todas as Categorias</title>
+
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title">Todas as Categorias</h2>
+            <div class="categories-grid">
+                {% for category in categories %}
+                    <a href="{% url 'show_movie_category' category.slug %}" class="category-card">
+                        <div class="category-banner">
+                            <img src="{{ category.banner_movie.banner.url }}" alt="{{ category.banner_movie.title }}">
+                            <div class="category-overlay">
+                                <span class="category-name">{{ category.name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+{% include 'partials/footer.html' %}
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 60px; /* ajuste conforme a altura real da sua navbar */
+}
+
+:root {
+    --primary-black: #000000;
+    --primary-red: #e50914;
+    --primary-white: #ffffff;
+    --text-muted: #cccccc;
+}
+
+.categories-section {
+    background: var(--primary-black);
+    padding: 3rem 0 2rem 0;
+}
+
+.container {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--primary-white);
+    text-align: left;
+    width: 100%;
+    display: block;
+    /* Se estiver usando grid no container, garanta que ocupe toda a linha: */
+    grid-column: 1 / -1;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* menor valor mínimo */
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0 auto;
+    justify-items: center; /* centraliza os cards */
+    max-width: 900px; /* limita a largura máxima do grid */
+}
+
+.category-card {
+    text-decoration: none;
+    color: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(229, 9, 20, 0.10);
+    transition: transform 0.3s cubic-bezier(.4,2,.3,1), box-shadow 0.3s;
+    position: relative;
+    background: var(--primary-black);
+    display: block;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+    z-index: 2;
+}
+
+.category-banner {
+    position: relative;
+    width: 290px;      /* largura fixa */
+    height: 180px;     /* altura fixa */
+    background: #222;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.category-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s;
+}
+
+.category-card:hover .category-banner img {
+    filter: brightness(0.85) blur(1px);
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    /* Remova ou comente a linha abaixo */
+    /* background: linear-gradient(0deg, rgba(13,13,13,0.95) 80%, rgba(13,13,13,0.1) 100%); */
+    background: none; /* Deixe o fundo transparente */
+    padding: 1rem;
+    text-align: left;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    pointer-events: none;
+}
+
+.category-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--primary-white);
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    background: none;
+    pointer-events: auto;
+}
+
+@media (max-width: 900px) {
+    .categories-grid {
+        gap: 0.5rem;
+    }
+    .category-banner { height: 120px; }
+    .category-name { font-size: 1rem; }
+    .categories-section { padding: 2rem 0 1rem 0; }
+}
+
+@media (min-width: 700px) {
+    .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 900px;
+    }
+}
+</style>

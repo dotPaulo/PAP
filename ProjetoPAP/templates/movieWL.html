@@ -1,0 +1,52 @@
+{% load static %}
+
+{% include 'partials/navbar_logged.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
+
+    <title>
+        AulaPlay - Assistir Depois
+    </title>
+
+<main class="main-container">
+
+    <link rel="stylesheet" href="{% static 'assets/CSS/movieList.css' %}">
+
+    <!-- Popular Movies Section -->
+    <section class="popular-section">
+        <div class="container">
+            <h2 class="section-title">Assistir depois</h2>
+            <div class="movie-list-grid">
+                {% for movie in movies %}
+                    <div class="movie-card">
+                        <div class="movie-thumb">
+                            <img src="{{ movie.flyer.url }}" alt="{{ movie.title }}" class="movie-img">
+                            <div class="movie-overlay">
+                                <a href="{% url 'show_det' movie_id=movie.uuid %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="overlay-btn">Ver</button>
+                                </a>
+                                <form action="{% url 'add_to_favorites' movie.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="overlay-btn">Favoritos</button>
+                                </form>
+                                <form action="{% url 'remove_from_watch_later' movie.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="overlay-btn">Remover</button>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>
+{% include 'partials/footer.html' %}

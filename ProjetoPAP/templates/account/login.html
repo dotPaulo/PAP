@@ -2,7 +2,7 @@
     {% load static %}
     {% block title %}
     
-    sitePAP - Login
+    AulaPlay - Login
     {% endblock title %}
     
 {% block content %}
@@ -16,39 +16,36 @@
                     Log In
                 </h1>
                 {% csrf_token %}
-                
+                {% if form.non_field_errors %}
+                    <div class="text-red-500 text-center my-3">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
                 {% if form.errors %}
-                
-                <div class=" text-center my-4 text-primary_red">
-                
-                
-                
-                <p class="text-primary_red ">
-                    
-                    {{form.non_field_errors}}
-                </p>
-               
-                   
-                </div>
+                    <div class="text-red-500 text-center my-3">
+                        {% for field in form %}
+                            {{ field.errors }}
+                        {% endfor %}
+                    </div>
                 {% endif %}
                 <div> 
                     <Label class='text-lg font-medium mb-3'>
                         Email
                     </Label>
-                    <input class="p-2 bg-gray-200 rounded-sm text-gray-900 outline-none block w-full" type="email" name="login" id="id_login" placeholder="Your Email">
+                    <input class="p-2 bg-gray-200 rounded-sm text-gray-900 outline-none block w-full" type="email" name="login" id="id_login" placeholder="Seu email">
                 </div>
                 <div class='my-3'> 
                     <Label class='text-lg font-medium mb-3'>
                         Password
                     </Label>
-                    <input class="p-2 bg-gray-200 rounded-sm text-gray-900 outline-none block w-full" type="password" name="password" id="id_password" placeholder="Password">
+                    <input class="p-2 bg-gray-200 rounded-sm text-gray-900 outline-none block w-full" type="password" name="password" id="id_password" placeholder="Senha">
                 </div>
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_value }}" value="{{ redirect_field_value }}" />
                 {% endif %}
                 <div class="flex justify-center items-center">
                     <button class="py-2 px-4 bg-primary_red text-gray-100 font-medium text-lg rounded-md">
-                        Log In
+                        Logar
                     </button>
                 </div>
 

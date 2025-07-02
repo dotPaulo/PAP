@@ -1,24 +1,28 @@
 {% load static %}
+<link rel="stylesheet" href="{% static 'assets/CSS/navbar.css' %}">
+<link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}">
 
-<nav class="flex text-gray-100 justify-between items-right pl py-3 px-5 pb fixed w-full z-10">
-    
-    <div class="w-6/12">
-        <a href="/">
-        <img src="{% static 'Imagens/LOGOAEFHP.png' %}" alt="logo" class="w-6/12 md:w-2/12 netflixD">
+<nav>
+    <!-- Esquerda: Logo -->
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'Imagens/logo.png' %}" alt="AulaPlay">
         </a>
     </div>
 
-    {% if AUTH != 'false'  %}
-
-        {% if request.user.is_authenticated %}
-                <div>
-                <form action="{% url 'account_logout' %}" method="post">
-                    {% csrf_token %}
-                    <button class='bg-primary_red marginL py-1 px-3 text-white md:text-lg rounded-md'>
-                        Deslogar
-                    </button>
-                </form>
-                </div>
-            {% endif %}
+    <!-- Direita: Ações do usuário -->
+    <div class="user-actions">
+        {% if user.is_authenticated and current_profile %}
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'profile_list' %}">
+                <i class="fas fa-sign-out-alt"></i> Perfis
+            </a>
         {% endif %}
-    </nav>
+    </div>
+</nav>

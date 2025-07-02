@@ -1,5 +1,94 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.dropdown-toggle {
+  background: none;
+  border-radius: 5%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+}
+.bar {
+  border-radius: 14%;
+  width: 100%;
+  height: 4px;
+  background-color: rgb(255, 249, 249);
+}
+.dropdown-menu {
+  margin-left: 10px;
+  border-radius: 5%;
+  display: none;
+  position: fixed;
+  top: 40px;
+  left: 0;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid rgba(117,0,0);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Utilitários */
+.no-wrap { white-space: nowrap; }
+.overflow { overflow: hidden; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Botão e hover */
+.elemento {
+  padding: 0.7px;
+  background-color: #000;
+  border: none;
+  position: relative;
+  transition: box-shadow 0.4s;
+}
+.elemento:hover {
+  color: red;
+}
+button, .elemento {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+button:hover, .elemento:hover {
+  background-color: #000;
+  border-bottom: 2px solid #e50914;
+  color: #e50914;
+}
+
+/* Grid de botões */
+.button-container {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  margin-top: 6%;
+  margin-left: 10%;
+  z-index: 999;
+}
+
+/* Body customizado */
+.bodyEdit {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  z-index: 998;
+  background-color: #141414;
+  color: white;
+}
+
+
 /*! tailwindcss v2.1.4 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */

@@ -1,31 +1,351 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block title %}
-    Netflix - Movie
-{% endblock title %}
 
-{% block content %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <main class='bg-primary_black h-full w-full '>
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'Imagens/favicon.ico' %}">
 
-        {{ movie|json_script:"movie_data" }}
-        
-        <video  controls class="w-full h-screen player "></video>
-        
-    </main>
+  <title>AulaPlay - Player</title>
 
-    <script>
-        const videoEl=document.querySelector('video')
-        const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
-        
-    
-        const url =new URL(location.href)
-        
-        const video_param = parseInt(url.searchParams.get("filme")) ? parseInt(url.searchParams.get("filme")) : 0
+  <style>
+    html, body {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #181818;
+      color: #fff;
+    }
+    .custom-player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;         /* um pouco maior */
+      width: 100vw;
+      margin-top: 90px;    /* ajuste conforme necessário */
+    }
+    .custom-video {
+      width: 70vw;          /* maior */
+      max-width: 1000px;    /* maior */
+      border-radius: 1rem 1rem 0 0;
+      background: #000;
+      box-shadow: 0 8px 32px #000a;
+    }
+    .controls {
+      width: 70vw;          /* maior */
+      max-width: 1000px;    /* maior */
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 8px 32px #000a;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
+    }
+    .control-btn {
+      background: #e50914;
+      border: none;
+      color: #fff;
+      font-size: 1.3rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .control-btn:hover {
+      background: #b0060f;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+      margin: 0 1rem;
+    }
+    .progress {
+      background: #e50914;
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .time {
+      font-size: 0.95rem;
+      min-width: 60px;
+      text-align: center;
+      color: #fff;
+    }
+    .volume-slider {
+      width: 80px;
+      accent-color: #e50914;
+    }
+    @media (max-width: 900px) {
+      .custom-video, .controls {
+        width: 98vw;
+        max-width: 100vw;
+      }
+      .custom-player-container {
+        margin-top: 56px; /* ajuste para navbar menor em mobile, se necessário */
+      }
+    }
+    .custom-player-container:fullscreen,
+    .custom-player-container:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      background: #181818;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 9999;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end; /* Alinha o player ao rodapé */
+    }
 
-        videoEl.setAttribute('src',`http://localhost:8000/media/${movie_data[video_param].file}`)
-        videoEl.loop = true
-    </script>
-    
-    
-{% endblock content %}
+    .custom-player-container:fullscreen .custom-video,
+    .custom-player-container:-webkit-full-screen .custom-video {
+      width: 100vw !important;
+      height: 80vh !important;
+      max-width: 100vw !important;
+      max-height: 80vh !important;
+      border-radius: 0;
+    }
+
+    .custom-player-container:fullscreen .controls,
+    .custom-player-container:-webkit-full-screen .controls {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      margin-bottom: 0 !important;
+      border-radius: 0 0 0 0;
+    }
+    .custom-player-container:fullscreen #pip-btn,
+    .custom-player-container:-webkit-full-screen #pip-btn {
+      display: none !important;
+    }
+    .controls {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
+    }
+
+    .custom-player-container.hide-controls .controls {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .custom-player-container.hide-controls .progress-bar {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    {% include 'partials/navbar_logged.html' %}
+    {{ movie|json_script:"movie_data"}}
+    <div class="custom-player-container">
+      <video id="custom-video" class="custom-video" preload="metadata"></video>
+      <div class="controls">
+        <button class="control-btn" id="play-pause" title="Play/Pause">
+          <span id="play-icon">&#9654;</span>
+          <span id="pause-icon" style="display:none">&#10073;&#10073;</span>
+        </button>
+        <span class="time" id="current-time">00:00</span>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+        <span class="time" id="duration">00:00</span>
+        <input type="range" min="0" max="1" step="0.01" value="1" id="volume" class="volume-slider" title="Volume">
+        <button class="control-btn" id="fullscreen" title="Tela cheia">
+          <span id="fullscreen-enter">&#x26F6;</span>
+          <span id="fullscreen-exit" style="display:none">&#x2715;</span>
+        </button>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    const videoEl = document.getElementById('custom-video');
+    const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
+    const url = new URL(location.href);
+    const video_param = parseInt(url.searchParams.get("filme")) ? parseInt(url.searchParams.get("filme")) : 0;
+    videoEl.src = `http://localhost:8000/media/${movie_data[video_param].file}`;
+
+    // Custom Controls
+    const playPauseBtn = document.getElementById('play-pause');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const progressBar = document.getElementById('progress-bar');
+    const progress = document.getElementById('progress');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volume');
+    const fullscreenBtn = document.getElementById('fullscreen');
+    const fullscreenEnter = document.getElementById('fullscreen-enter');
+    const fullscreenExit = document.getElementById('fullscreen-exit');
+    const playerContainer = document.querySelector('.custom-player-container');
+
+    function formatTime(time) {
+      if (isNaN(time)) return "00:00";
+      const min = Math.floor(time / 60).toString().padStart(2, '0');
+      const sec = Math.floor(time % 60).toString().padStart(2, '0');
+      return `${min}:${sec}`;
+    }
+
+    // Atualiza duração assim que possível
+    function updateDuration() {
+      durationEl.textContent = formatTime(videoEl.duration);
+    }
+
+    videoEl.addEventListener('loadedmetadata', () => {
+      updateDuration();
+      currentTimeEl.textContent = formatTime(videoEl.currentTime);
+    });
+
+    // Atualiza duração caso carregue depois
+    videoEl.addEventListener('durationchange', updateDuration);
+
+    videoEl.addEventListener('timeupdate', () => {
+      currentTimeEl.textContent = formatTime(videoEl.currentTime);
+      const percent = (videoEl.currentTime / videoEl.duration) * 100;
+      progress.style.width = percent + '%';
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      if (videoEl.paused) {
+        videoEl.play();
+      } else {
+        videoEl.pause();
+      }
+    });
+
+    videoEl.addEventListener('play', () => {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = '';
+    });
+
+    videoEl.addEventListener('pause', () => {
+      playIcon.style.display = '';
+      pauseIcon.style.display = 'none';
+    });
+
+    volumeSlider.addEventListener('input', () => {
+      videoEl.volume = volumeSlider.value;
+    });
+
+    function isFullscreen() {
+      return document.fullscreenElement === playerContainer ||
+             document.webkitFullscreenElement === playerContainer ||
+             document.msFullscreenElement === playerContainer;
+    }
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!isFullscreen()) {
+        if (playerContainer.requestFullscreen) {
+          playerContainer.requestFullscreen();
+        } else if (playerContainer.webkitRequestFullscreen) {
+          playerContainer.webkitRequestFullscreen();
+        } else if (playerContainer.msRequestFullscreen) {
+          playerContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    });
+
+    // Atualiza ícone ao entrar/sair do fullscreen
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+    document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+    function updateFullscreenIcon() {
+      if (isFullscreen()) {
+        fullscreenEnter.style.display = 'none';
+        fullscreenExit.style.display = '';
+      } else {
+        fullscreenEnter.style.display = '';
+        fullscreenExit.style.display = 'none';
+      }
+    }
+
+    let controlsTimeout;
+
+    function showControls() {
+      playerContainer.classList.remove('hide-controls');
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        playerContainer.classList.add('hide-controls');
+      }, 1500);
+    }
+
+    // Mostra controles ao mover mouse sobre o player
+    playerContainer.addEventListener('mousemove', showControls);
+    playerContainer.addEventListener('mouseleave', () => {
+      playerContainer.classList.add('hide-controls');
+    });
+
+    // Inicialmente, esconde após 1.5s
+    showControls();
+
+    let isSeeking = false;
+
+    // Clique simples
+    progressBar.addEventListener('click', (e) => {
+      if (progressBar.offsetWidth === 0) return; // Protege contra largura zero
+      seekToPosition(e);
+    });
+
+    // Arraste
+    progressBar.addEventListener('mousedown', (e) => {
+      if (progressBar.offsetWidth === 0) return;
+      isSeeking = true;
+      seekToPosition(e);
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (isSeeking) seekToPosition(e);
+    });
+    document.addEventListener('mouseup', () => {
+      isSeeking = false;
+    });
+
+    function seekToPosition(e) {
+      // Sempre use o progressBar para o cálculo do retângulo
+      const rect = progressBar.getBoundingClientRect();
+      // Use clientX do evento para calcular a posição relativa
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const percent = x / rect.width;
+      if (!isNaN(videoEl.duration) && videoEl.duration > 0) {
+        videoEl.currentTime = percent * videoEl.duration;
+      }
+    }
+  </script>
+</body>
+</html>

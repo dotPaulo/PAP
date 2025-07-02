@@ -1,0 +1,36 @@
+{% extends 'admin\base_dashboard.html' %}
+{% load static %}
+
+{% block title %}
+    Dashboard | Seleção de Filme para Edição
+{% endblock title %}
+
+{% block dashboard_content %}
+    <link rel="stylesheet" href="{% static 'assets/CSS/movieEditSelection.css' %}">
+    {% if messages %}
+        {% for message in messages %}
+            <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+        {% endfor %}
+    {% endif %}
+    <section class="popular-section">
+        <div class="container">
+            <div class="movie-list-grid">
+                {% for movie in movies %}
+                    <a href="{% url 'movie_edit' movie_id=movie.uuid %}" class="movie-card">
+                        <div class="movie-thumb">
+                            {% if movie.flyer %}
+                                <img src="{{ movie.flyer.url }}" alt="{{ movie.title }}" class="movie-img">
+                            {% else %}
+                                <img src="{% static '\flyers\8.jpg' %}" alt="Imagem não disponível" class="movie-img">
+                            {% endif %}
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="text-muted">Nenhum filme disponível no momento.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock dashboard_content %}
+
+

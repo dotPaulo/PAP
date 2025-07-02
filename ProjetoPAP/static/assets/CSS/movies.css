@@ -1,0 +1,47 @@
+/* Fundo principal preto fosco */
+.bg-primary_black {
+  background-color: #141414;
+}
+
+/* Efeito hover nos filmes */
+.elemento {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.elemento:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Removido scroll horizontal: agora usamos grid fixo com quebra de linha */
+.movie_lis {
+  /* Removemos overflow-x: auto; e scroll-behavior */
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem; /* espaço entre os filmes */
+  width: 100%;
+}
+
+/* Estilização da scrollbar removida pois o scroll horizontal não é mais necessário */
+
+/* Botão "Play" com efeito */
+button:hover {
+  background-color: #e5e5e5;
+  color: black;
+}
+
+/* Responsividade adicional */
+@media (max-width: 1024px) {
+  .movie_lis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .movie_lis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .text-6xl {
+    font-size: 2.5rem;
+  }
+}

@@ -1,50 +1,66 @@
-{% extends 'base.html' %}
+{% extends 'admin\\base_dashboard.html' %}
 {% load static %}
 {% block title %}
-    sitePAP - Profile
+    Dashboard | Criar Perfil
 {% endblock title %}
 
-
-{% block content %}
-<section class='bg-primary_black min-h-screen py-20 md:py-32 flex-col flex items-center' style='background-image:url("{% static 'background_netflix.jpg' %}")'>
-    <div class="flex flex-wrap justify-center  w-10/12  md:w-6/12">
-        <form method='POST' id="profileForm" class="w-full md:w-8/12 bg-gray-900 p-5 rounded-lg">
-            <h1 class="text-4xl text-center text-gray-100 font-medium">
+{% block dashboard_content %}
+<section>
+    <div class="flex">
+        <form method="POST" id="profileForm" class="filme-form">
+            <h1 class="form-title">
                 Criar Perfil
             </h1>
             {% csrf_token %}
-            {{ form.errors }}
-            <div class="my-4"> 
-                <label class='text-lg text-gray-200 font-medium mb-3'>
-                    Nome do Perfil
-                </label>
-                <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" type="text" name="name" id="id_name" placeholder="Nome do Perfil">
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_name">Nome do Perfil</label>
+                <input required type="text" name="name" id="id_name" placeholder="Nome do perfil">
             </div>
 
-            <div class="my-4">
-                <label class='text-lg text-gray-200 font-medium mb-3'>Opções</label>
-                <select class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" name="role" id="id_role">
-                    <option value='Regular'>Professor</option>
-                    <option value='Administrador'>Administrador</option>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input required type="email" name="email" id="email" placeholder="Seu email">
+            </div>
+
+            <div class="form-group">
+                <label for="id_role">Opções</label>
+                <select name="role" id="id_role">
+                    <option value="Regular">Professor</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Coordenador">Coordenador</option>
                 </select>
             </div>
 
-            <div class="my-4"> 
-                <label class='text-lg text-gray-200 font-medium mb-3'>
-                    Senha
-                </label>
-                    <input required class="p-2 bg-gray-500 rounded-sm text-gray-200 outline-none block w-full" type="password" name="password" id="password" placeholder="Senha">
+            <div class="form-group password-group">
+                <label for="password">Senha</label>
+                <div class="password-wrapper">
+                    <input required type="password" name="password" id="password" placeholder="Senha">
+                    <button type="button" id="togglePassword" class="toggle-password" tabindex="-1">
+                        👁️
+                    </button>
+                </div>
             </div>
 
-            <!-- Botão de Criar Perfil -->
-            <div class="text-center mt-6">
-                <button type="submit" class="bg-primary_red py-1 px-3 text-white md:text-lg rounded-md">
-                    Criar Perfil
-                </button>
+            <div class="form-actions">
+                <button type="submit">Criar Perfil</button>
             </div>
         </form>
     </div>
 </section>
 
-<script src="{% static 'JS/profileCreate.js' %}"></script>
-{% endblock content %}
+<script src="{% static 'assets\JS\profileCreate.js' %}"></script>
+<script src="{% static 'assets\JS\sweetAlert.js' %}"></script>
+{% endblock dashboard_content %}
