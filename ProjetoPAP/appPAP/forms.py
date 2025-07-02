@@ -1,5 +1,5 @@
 from django import forms
-from .models import Movie, Video, ROLE
+from .models import Movie, Video, ROLE, Category
 from django.contrib.auth import get_user_model
 
 class MovieForm(forms.ModelForm):
@@ -7,6 +7,10 @@ class MovieForm(forms.ModelForm):
         model = Movie
         fields = ['title', 'description', 'type', 'flyer', 'banner', 'videos']
 
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
 
 class VideoForm(forms.ModelForm):
     class Meta:

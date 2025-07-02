@@ -1,0 +1,132 @@
+/* Fundo escuro da tela */
+body, .bg-primary_black {
+    background: #18191a;
+    min-height: 100vh;
+}
+
+/* Container centralizado */
+.profile-login-container {
+    max-width: 34rem;
+    background: rgba(0,0,0,0.90);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    border: 1px solid #fff;
+    margin: 3rem auto;
+}
+
+/* Título */
+.profile-login-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+/* Subtítulo */
+.profile-login-subtitle {
+    color: #d1d5db;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.profile-login-subtitle .text-primary_red {
+    color: #ef233c;
+    font-weight: 600;
+}
+
+/* Mensagens de erro */
+.profile-login-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Formulário */
+.profile-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Label */
+.profile-login-label {
+    color: #d1d5db;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+/* Input */
+.profile-login-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: #23272b;
+    color: #fff;
+    border: 1px solid #374151;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.profile-login-input:focus {
+    border: 2px solid #ef233c;
+    box-shadow: 0 0 0 2px #ef233c33;
+}
+
+.profile-login-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Botão */
+.profile-login-btn {
+    width: 100%;
+    background: #ef233c;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.85rem 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.profile-login-btn:hover {
+    background: #c3001e;
+}
+
+/* Link voltar */
+.profile-login-back {
+    color: #9ca3af;
+    font-size: 0.95rem;
+    text-align: center;
+    display: block;
+    margin-top: 1.5rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.profile-login-back:hover {
+    color: #ef233c;
+    text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .profile-login-container {
+        padding: 1rem;
+        border-radius: 0.75rem;
+    }
+    .profile-login-title {
+        font-size: 1.5rem;
+    }
+}

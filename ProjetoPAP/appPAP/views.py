@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password, make_password, is_password_usable
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group
@@ -54,31 +54,28 @@ class EULA(View):
 def admin_dashboard(request):
     if not request.user.groups.filter(name__in=['Administrador', 'Coordenador']).exists():
         return render(request, '404.html')
+<<<<<<< HEAD
     if not request.user.groups.filter(name__in=['Administrador', 'Coordenador']).exists():
         return render(request, '404.html')
+=======
+    
+>>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f
 
     # Contar dados
     total_users = Profile.objects.count()
-    total_movies = Movie.objects.filter(type='Documentário').count()
+    total_movies = Movie.objects.count()
+    total_categories = Category.objects.count()
+    total_videos = Video.objects.count()
 
     context = {
         'total_users': total_users,
         'total_movies': total_movies,
+        'total_categories': total_categories,
+        'total_videos': total_videos,
 
     }
     return render(request, 'admin/dashboard.html', context)
 
-
-def dashboard_view(request):
-    profile_count = Profile.objects.count()
-    movie_count = Movie.objects.count()
-
-    context = {
-        'total_users': profile_count,
-        'movie_count': movie_count,
-    }
-
-    return render(request, 'dashboard.html', context)
 
 
 """
@@ -213,6 +210,53 @@ class VideoCreateView(CreateView):
         messages.success(self.request, 'Vídeo criado com sucesso!')
         return response
 
+class VideoEditView(View):
+    template_name = 'admin/videoEdit.html'
+    form_class = VideoForm
+
+    def get(self, request):
+        videos = Video.objects.all()
+        video_id = request.GET.get('video_id')
+        selected_video = None
+        form = None
+
+        if video_id:
+            selected_video = get_object_or_404(Video, id=video_id)
+            form = self.form_class(instance=selected_video)
+        else:
+            form = self.form_class()
+
+        return render(request, self.template_name, {
+            'videos': videos,
+            'selected_video': selected_video,
+            'form': form,
+        })
+
+    def post(self, request):
+        videos = Video.objects.all()
+        video_id = request.POST.get('video_id')
+        selected_video = None
+
+        if video_id:
+            selected_video = get_object_or_404(Video, id=video_id)
+            if 'delete' in request.POST:
+                selected_video.delete()
+                messages.success(request, 'Vídeo deletado com sucesso!')
+                return redirect('admin_dashboard')
+            form = self.form_class(request.POST, request.FILES, instance=selected_video)
+        else:
+            form = self.form_class(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Vídeo atualizado com sucesso!')
+            return redirect('admin_dashboard')
+
+        return render(request, self.template_name, {
+            'videos': videos,
+            'selected_video': selected_video,
+            'form': form,
+        })
 """
     FUNCIONALIDADES DE PERFIL
 """
@@ -243,12 +287,14 @@ class ProfileCreateView(LoginRequiredMixin, CreateView):
 
         # Verifica se já existe usuário
         user, created = User.objects.get_or_create(username=email, defaults={
-            'email': email,
-            'password': make_password(password),
-        })
+        'email': email
+    })
 
-        if not created:
-            user.password = make_password(password)
+        if created:
+            user.set_password(password)
+            user.save()
+        else:
+            user.set_password(password)
             user.save()
 
         # Grupos
@@ -350,6 +396,9 @@ class ProfileEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        password = self.request.POST.get('password')
+        if password:
+            form.instance.password = make_password(password)
         response = super().form_valid(form)
         messages.success(self.request, 'Perfil atualizado com sucesso!')
         return response
@@ -374,19 +423,20 @@ class ProfileEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 def profile_login(request, profile_uuid):
     profile = get_object_or_404(Profile, uuid=profile_uuid)
-
     request.session['current_profile_uuid'] = str(profile.uuid)
 
     request.session['current_profile_uuid'] = str(profile.uuid)
 
     if request.method == 'POST':
         password = request.POST.get('password')
+        stored_password = profile.password
 
-        if check_password(password, profile.password):  # Verifica o hash
+        if check_password(password, stored_password):
             request.session['profile_access'] = str(profile.uuid)
+            messages.success(request, 'Login realizado com sucesso!')
             return redirect('watch', profile_id=profile.uuid)
-        else:
-            messages.error(request, 'Senha incorreta. Tente novamente.')
+
+        messages.error(request, 'Senha incorreta. Tente novamente.')
 
     return render(request, 'profile_login.html', {'profile': profile})
 
@@ -556,6 +606,7 @@ def search_results(request):
     except Exception:
         return render(request, '404.html')
 
+<<<<<<< HEAD
 def all_categories(request):
     categories = []
     for value, label in MOVIE_TYPE:
@@ -603,3 +654,76 @@ def video_edit(request):
         'form': form,
         'selected_video': selected_video,
     })
+=======
+
+
+"""
+    FUNCIONALIDADES DE CATEGORIAS
+"""
+class CategoryCreateView(UserPassesTestMixin, CreateView):
+    model = Category
+    template_name = 'admin/categoryCreate.html'
+    form_class = CategoryForm
+    success_url = reverse_lazy('admin_dashboard')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Categoria criada com sucesso!')
+        return response
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+class CategoryEditView(UserPassesTestMixin, View):
+    template_name = 'admin/categoryEdit.html'
+    form_class = CategoryForm
+
+    def get(self, request):
+        categories = Category.objects.all()
+        category_id = request.GET.get('category_id')
+        selected_category = None
+        form = None
+
+        if category_id:
+            selected_category = get_object_or_404(Category, id=category_id)
+            form = self.form_class(instance=selected_category)
+        else:
+            form = self.form_class()
+
+        return render(request, self.template_name, {
+            'categories': categories,
+            'selected_category': selected_category,
+            'form': form,
+        })
+
+    def post(self, request):
+        categories = Category.objects.all()
+        category_id = request.POST.get('category_id')
+        selected_category = None
+
+        if category_id:
+            selected_category = get_object_or_404(Category, id=category_id)
+            if 'delete' in request.POST:
+                selected_category.delete()
+                messages.success(request, 'Categoria deletada com sucesso!')
+                return redirect('admin_dashboard')
+            form = self.form_class(request.POST, instance=selected_category)
+        else:
+            form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoria atualizada com sucesso!')
+            return redirect('admin_dashboard')
+
+        return render(request, self.template_name, {
+            'categories': categories,
+            'selected_category': selected_category,
+            'form': form,
+        })
+
+    def test_func(self):
+
+        return self.request.user.is_staff or self.request.user.is_superuser
+>>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f

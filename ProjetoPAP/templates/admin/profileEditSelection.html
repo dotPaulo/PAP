@@ -17,19 +17,20 @@
   {% endfor %}
 {% endif %}
 
-<section class="min-h-screen flex flex-col justify-center items-center bg-white">
-  <h2 class="font-primary font-medium text-5xl my-4 text-black">
-    Selecione um perfil.
-  </h2>
-
-  <div class="profile-grid">
-    {% for profile in profiles %}
-      <a href="{% url 'profile_edit' profile_id=profile.uuid %}" class="no-underline">
-        <div class="profile-card">
-          <p>{{ profile.name }}</p>
-        </div>
-      </a>
-    {% endfor %}
+<section style="min-height: 100vh; background: #fff; padding-top: 40px;">
+  <div style="max-width: 700px; margin: 0 auto;">
+    <h2 class="font-primary font-medium text-5xl mb-8 text-black titulo-perfil" style="text-align:center;">
+      Selecione um perfil.
+    </h2>
+    <div class="profile-grid">
+      {% for profile in profiles %}
+        <a href="{% url 'profile_edit' profile_id=profile.uuid %}" class="no-underline">
+          <div class="profile-card">
+            <p>{{ profile.name }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 

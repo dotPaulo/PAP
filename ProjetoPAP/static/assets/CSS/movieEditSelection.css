@@ -3,7 +3,7 @@
 body {
     background-color: var(--primary-black);
     color: var(--primary-white);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif;
 }
 
 /* Scrollbar para a lista de filmes */

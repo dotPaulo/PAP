@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'admin/base_dashboard.html' %}
 {% load static %}
 
@@ -62,4 +63,61 @@
         </form>
     </div>
 </section>
+=======
+{% extends 'admin\base_dashboard.html' %}
+{% load static %}
+
+{% block title %}
+    sitePAP - Editar Vídeo
+{% endblock title %}
+
+
+{% if messages %}
+  {% for message in messages %}
+    <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+  {% endfor %}
+{% endif %}
+
+{% block dashboard_content %}
+<!-- Adicione a classe "dark-container" ao seu container principal -->
+<section>
+    <div class="flex dark-container">
+    <form method="POST" enctype="multipart/form-data" class="video-form">
+        <h1 class="form-title">Editar Vídeo</h1>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_video_select">Selecione o Vídeo</label>
+            <select required name="video_id" id="id_video_select" onchange="this.form.submit()">
+                <option value="">Selecione...</option>
+                {% for video in videos %}
+                    <option value="{{ video.id }}" {% if selected_video and video.id == selected_video.id %}selected{% endif %}>{{ video.titulo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if selected_video %}
+        <div class="form-group">
+            <label for="id_titulo">Título</label>
+            <input required type="text" name="titulo" id="id_titulo" value="{{ form.titulo.value|default_if_none:selected_video.titulo }}">
+        </div>
+
+        <div class="form-group">
+            <label for="id_file">Arquivo de Vídeo</label>
+            <input type="file" name="file" id="id_file">
+            {% if selected_video.file %}
+                <p>Atual: <a href="{{ selected_video.file.url }}" target="_blank">{{ selected_video.file.name }}</a></p>
+            {% endif %}
+        </div>
+
+        <div class="form-actions form-buttons" style="display: flex; gap: 10px;">
+            <button type="submit" name="save" style="background-color: #007bff; color: white;">Salvar Alterações</button>
+            <button type="submit" name="delete" value="1" style="background-color: #dc3545; color: white;">Deletar Vídeo</button>
+        </div>
+        {% endif %}
+    </form>
+</div>
+</section>
+<script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
+>>>>>>> 1baab93d35eae0a0fe1d0e144806287b27881b8f
 {% endblock dashboard_content %}

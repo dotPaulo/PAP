@@ -1,0 +1,46 @@
+{% extends 'admin/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}
+    sitePAP - Editar Categoria
+{% endblock title %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+  {% endfor %}
+{% endif %}
+
+{% block dashboard_content %}
+<section>
+    <div class="flex dark-container">
+        <form method="POST" class="category-form">
+            <h1 class="form-title">Editar Categoria</h1>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_category_select">Selecione a Categoria</label>
+                <select required name="category_id" id="id_category_select" onchange="this.form.submit()">
+                    <option value="">Selecione...</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if selected_category and category.id == selected_category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if selected_category %}
+            <div class="form-group">
+                <label for="id_name">Nome da Categoria</label>
+                <input required type="text" name="name" id="id_name" value="{{ form.name.value|default_if_none:selected_category.name }}">
+            </div>
+
+            <div class="form-actions form-buttons" style="display: flex; gap: 10px;">
+                <button type="submit" name="save" style="background-color: #007bff; color: white;">Salvar Alterações</button>
+                <button type="submit" name="delete" value="1" style="background-color: #dc3545; color: white;">Deletar Categoria</button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</section>
+<script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
+{% endblock dashboard_content %}

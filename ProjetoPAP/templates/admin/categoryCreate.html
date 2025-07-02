@@ -1,0 +1,41 @@
+{% extends 'admin\\base_dashboard.html' %}
+{% load static %}
+{% block title %}
+    sitePAP - Criar Categoria
+{% endblock title %}
+
+{% block dashboard_content %}
+<section>
+    <div class="flex">
+        <form method="POST" id="categoryForm" class="filme-form">
+            <h1 class="form-title">
+                Criar Categoria
+            </h1>
+            {% csrf_token %}
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_name">Nome da Categoria</label>
+                <input required type="text" name="name" id="id_name" placeholder="Nome da categoria">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Criar Categoria</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script src="{% static 'assets/JS/sweetAlert.js' %}"></script>
+{% endblock dashboard_content %}
