@@ -1,4 +1,4 @@
-# 📚 AulaPlay (sem nome ainda) - Plataforma de Vídeos Educativos
+# 📚 AulaPlay - Plataforma de Vídeos Educativos
 
 Este projeto faz parte da minha Prova de Aptidão Profissional (PAP) e tem como objetivo desenvolver uma **plataforma de visualização de vídeos com foco educacional**. Inspirado em plataformas de streaming modernas, o site foi projetado para ser simples, intuitivo e eficiente no auxílio ao aprendizado.
 
