@@ -99,13 +99,13 @@
                         <!-- Filmes -->
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseFilmes" aria-expanded="false" aria-controls="collapseFilmes">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-film" style="color: #fff"></i></div>
-                            Filmes
+                            Ficha Tecnica
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: #fff"></i></div>
                         </a>
                         <div class="collapse" id="collapseFilmes" aria-labelledby="headingFilmes" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionFilmes">
-                                <a class="nav-link" href="{% url 'movie_select' %}">Editar Filmes</a>
-                                <a class="nav-link" href="{% url 'movie_create' %}">Registar Filme</a>
+                                <a class="nav-link" href="{% url 'movie_select' %}">Editar Ficha</a>
+                                <a class="nav-link" href="{% url 'movie_create' %}">Registar Ficha</a>
                             </nav>
                         </div>
 
@@ -118,6 +118,7 @@
                         <div class="collapse" id="collapseVideos" aria-labelledby="headingVideos" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionVideos">
                                 <a class="nav-link" href="{% url 'video_create' %}">Registar Video</a>
+                                <a class="nav-link" href="{% url 'video_edit' %}">Editar Video</a>
                             </nav>
                         </div>
                     </div>

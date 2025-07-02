@@ -11,9 +11,14 @@
 
   <title>sitePAP - Player</title>
 
-  <!-- CSS Principal -->
-  <link rel="stylesheet" href="{% static 'assets/CSS/style.css' %}" />
   <style>
+    html, body {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: #181818;
       color: #fff;
@@ -23,19 +28,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 90vh;
+      height: 100vh;         /* um pouco maior */
       width: 100vw;
+      margin-top: 90px;    /* ajuste conforme necessário */
     }
     .custom-video {
-      width: 80vw;
-      max-width: 900px;
+      width: 70vw;          /* maior */
+      max-width: 1000px;    /* maior */
       border-radius: 1rem 1rem 0 0;
       background: #000;
       box-shadow: 0 8px 32px #000a;
     }
     .controls {
-      width: 80vw;
-      max-width: 900px;
+      width: 70vw;          /* maior */
+      max-width: 1000px;    /* maior */
       background: #1a1a1a;
       display: flex;
       align-items: center;
@@ -43,6 +49,10 @@
       padding: 1rem;
       border-radius: 0 0 1rem 1rem;
       box-shadow: 0 8px 32px #000a;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
     }
     .control-btn {
       background: #e50914;
@@ -92,6 +102,61 @@
         width: 98vw;
         max-width: 100vw;
       }
+      .custom-player-container {
+        margin-top: 56px; /* ajuste para navbar menor em mobile, se necessário */
+      }
+    }
+    .custom-player-container:fullscreen,
+    .custom-player-container:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      min-height: 100vh !important;
+      background: #181818;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 9999;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end; /* Alinha o player ao rodapé */
+    }
+
+    .custom-player-container:fullscreen .custom-video,
+    .custom-player-container:-webkit-full-screen .custom-video {
+      width: 100vw !important;
+      height: 80vh !important;
+      max-width: 100vw !important;
+      max-height: 80vh !important;
+      border-radius: 0;
+    }
+
+    .custom-player-container:fullscreen .controls,
+    .custom-player-container:-webkit-full-screen .controls {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      margin-bottom: 0 !important;
+      border-radius: 0 0 0 0;
+    }
+    .custom-player-container:fullscreen #pip-btn,
+    .custom-player-container:-webkit-full-screen #pip-btn {
+      display: none !important;
+    }
+    .controls {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0.4s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: auto;
+    }
+
+    .custom-player-container.hide-controls .controls {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .custom-player-container.hide-controls .progress-bar {
+      opacity: 0;
     }
   </style>
 </head>
@@ -112,18 +177,14 @@
         </div>
         <span class="time" id="duration">00:00</span>
         <input type="range" min="0" max="1" step="0.01" value="1" id="volume" class="volume-slider" title="Volume">
-        <button class="control-btn" id="fullscreen" title="Tela cheia">&#x26F6;</button>
-        <button class="control-btn" id="pip-btn" title="Moldura (Picture-in-Picture)">&#128247;</button>
+        <button class="control-btn" id="fullscreen" title="Tela cheia">
+          <span id="fullscreen-enter">&#x26F6;</span>
+          <span id="fullscreen-exit" style="display:none">&#x2715;</span>
+        </button>
       </div>
     </div>
   </main>
-
-  <footer>
-    <div class="container text-center py-4" style="color:#fff;">
-      &copy; 2025 Todos os direitos reservados.
-    </div>
-  </footer>
-
+  
   <script>
     const videoEl = document.getElementById('custom-video');
     const movie_data = JSON.parse(document.getElementById('movie_data').textContent);
@@ -141,7 +202,9 @@
     const durationEl = document.getElementById('duration');
     const volumeSlider = document.getElementById('volume');
     const fullscreenBtn = document.getElementById('fullscreen');
-    const pipBtn = document.getElementById('pip-btn');
+    const fullscreenEnter = document.getElementById('fullscreen-enter');
+    const fullscreenExit = document.getElementById('fullscreen-exit');
+    const playerContainer = document.querySelector('.custom-player-container');
 
     function formatTime(time) {
       if (isNaN(time)) return "00:00";
@@ -187,42 +250,102 @@
       pauseIcon.style.display = 'none';
     });
 
-    progressBar.addEventListener('click', (e) => {
-      const rect = progressBar.getBoundingClientRect();
-      const percent = (e.clientX - rect.left) / rect.width;
-      videoEl.currentTime = percent * videoEl.duration;
-    });
-
     volumeSlider.addEventListener('input', () => {
       videoEl.volume = volumeSlider.value;
     });
 
+    function isFullscreen() {
+      return document.fullscreenElement === playerContainer ||
+             document.webkitFullscreenElement === playerContainer ||
+             document.msFullscreenElement === playerContainer;
+    }
+
     fullscreenBtn.addEventListener('click', () => {
-      if (videoEl.requestFullscreen) {
-        videoEl.requestFullscreen();
-      } else if (videoEl.webkitRequestFullscreen) {
-        videoEl.webkitRequestFullscreen();
-      } else if (videoEl.msRequestFullscreen) {
-        videoEl.msRequestFullscreen();
+      if (!isFullscreen()) {
+        if (playerContainer.requestFullscreen) {
+          playerContainer.requestFullscreen();
+        } else if (playerContainer.webkitRequestFullscreen) {
+          playerContainer.webkitRequestFullscreen();
+        } else if (playerContainer.msRequestFullscreen) {
+          playerContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
       }
     });
 
-    // Picture-in-Picture (Moldura)
-    pipBtn.addEventListener('click', async () => {
-      if ('pictureInPictureEnabled' in document) {
-        try {
-          if (document.pictureInPictureElement) {
-            await document.exitPictureInPicture();
-          } else {
-            await videoEl.requestPictureInPicture();
-          }
-        } catch (err) {
-          alert('Não foi possível ativar o modo moldura.');
-        }
+    // Atualiza ícone ao entrar/sair do fullscreen
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+    document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+    function updateFullscreenIcon() {
+      if (isFullscreen()) {
+        fullscreenEnter.style.display = 'none';
+        fullscreenExit.style.display = '';
       } else {
-        alert('Seu navegador não suporta Picture-in-Picture.');
+        fullscreenEnter.style.display = '';
+        fullscreenExit.style.display = 'none';
       }
+    }
+
+    let controlsTimeout;
+
+    function showControls() {
+      playerContainer.classList.remove('hide-controls');
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        playerContainer.classList.add('hide-controls');
+      }, 1500);
+    }
+
+    // Mostra controles ao mover mouse sobre o player
+    playerContainer.addEventListener('mousemove', showControls);
+    playerContainer.addEventListener('mouseleave', () => {
+      playerContainer.classList.add('hide-controls');
     });
+
+    // Inicialmente, esconde após 1.5s
+    showControls();
+
+    let isSeeking = false;
+
+    // Clique simples
+    progressBar.addEventListener('click', (e) => {
+      if (progressBar.offsetWidth === 0) return; // Protege contra largura zero
+      seekToPosition(e);
+    });
+
+    // Arraste
+    progressBar.addEventListener('mousedown', (e) => {
+      if (progressBar.offsetWidth === 0) return;
+      isSeeking = true;
+      seekToPosition(e);
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (isSeeking) seekToPosition(e);
+    });
+    document.addEventListener('mouseup', () => {
+      isSeeking = false;
+    });
+
+    function seekToPosition(e) {
+      // Sempre use o progressBar para o cálculo do retângulo
+      const rect = progressBar.getBoundingClientRect();
+      // Use clientX do evento para calcular a posição relativa
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const percent = x / rect.width;
+      if (!isNaN(videoEl.duration) && videoEl.duration > 0) {
+        videoEl.currentTime = percent * videoEl.duration;
+      }
+    }
   </script>
 </body>
 </html>

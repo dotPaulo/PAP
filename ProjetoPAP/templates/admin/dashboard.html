@@ -3,6 +3,13 @@
 {% block title %}Dashboard | sitePAP{% endblock %}
 
 {% block dashboard_content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div id="swal-messages" data-type="{{ message.tags }}" data-message="{{ message }}"></div>
+        {% endfor %}
+    {% endif %}
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Bem-vindo/a {{ request.user.username }}!</h1>
     <ol class="breadcrumb mb-4">
