@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -38,59 +37,72 @@
 </head>
 <body class="bg-black text-gray-100 font-primary">
 
-<nav>
+<nav class="navbar-custom">
     <!-- Esquerda: Logo -->
     <div class="logo">
         <a href="{% url 'movie_list' %}">
             <img src="\static\Imagens\logo.png" alt="AulaPlay">
         </a>
     </div>
-
-    <!-- Meio: Dropdown de Categorias -->
-    <div class="user-actions">
-        <button class="user-actions" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Categorias
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">     
-            {% for value, label in movie_categories %}
-                <li>
-                    <a class="dropdown-item" href="{% url 'show_movie_category' value %}">{{ label }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+    <!-- Botões centrais -->
+    <div class="main-actions">
+        <a href="{% url 'all_categories' %}" class="main-action-link">
+            <button type="button" class="dropdown-toggle-custom">
+                Categorias
+            </button>
+        </a>
+        <a href="{% url 'movie_list' %}"><button type="button">Lista de Filmes</button></a>
+        <a href="{% url 'movie_fav' %}"><button type="button">Meus Favoritos</button></a>
+        <a href="{% url 'movie_wl' %}"><button type="button">Assistir depois</button></a>
     </div>
-
-    <!-- Direita: Ações do usuário -->
-    <!-- Botão list -->
-    <a href="{% url 'movie_list' %}">
-        <button class="user-actions" type="submit">
-            Lista de Filmes
+    <!-- Direita: Pesquisa e Sair -->
+    <div class="search-container">
+        <button id="search-toggle" type="button" aria-label="Pesquisar">
+            <i class="fas fa-search"></i>
         </button>
-    </a>
-    <!-- Botão fav -->
-                        <a href="{% url 'movie_fav' %}">
-                            <button class="user-actions" type="submit">
-                                Favoritos
-                            </button>
-                        </a>
-                        <!-- Botão WL -->
-                        <a href="{% url 'movie_wl' %}">
-                            <button class="user-actions" type="submit">
-                                Assistir depois
-                            </button>
-                        </a>
-    <div class="user-actions">
+        <form id="search-form" action="{% url 'search_results' %}" method="get" autocomplete="off">
+            <input type="text" name="q" placeholder="Pesquisar filmes..." />
+        </form>
+    </div>
+    <div class="right-actions">
         {% if user.is_authenticated or current_profile %}
-            <form method="post" action="{% url 'account_logout' %}">
+            <form method="post" action="{% url 'account_logout' %}" class="logout-form">
                 {% csrf_token %}
-                <button type="submit">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <button type="submit"><i class="fas fa-sign-out-alt"></i> Sair</button>
             </form>
         {% else %}
-            <a href="{% url 'home' %}">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </a>
+            <a href="{% url 'home' %}"><i class="fas fa-sign-out-alt"></i> Sair</a>
         {% endif %}
     </div>
 </nav>
+
+<script>
+    // Mostra/esconde a barra de pesquisa ao clicar na lupa
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('search-toggle');
+        const form = document.getElementById('search-form');
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+            if(form.style.display === 'block') {
+                form.querySelector('input').focus();
+            }
+        });
+        // Fecha ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!toggle.contains(e.target) && !form.contains(e.target)) {
+                form.style.display = 'none';
+            }
+        });
+        // Fecha ao enviar
+        form.addEventListener('submit', function() {
+            form.style.display = 'none';
+        });
+    });s
+</script>
+
+{% block content %}
+{% endblock content %}
+
+</body>
+</html>

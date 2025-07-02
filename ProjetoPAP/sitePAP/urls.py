@@ -45,6 +45,11 @@ urlpatterns = [
     path('videos/edit/', VideoEditView.as_view(), name='video_edit'),
 
 
+    # Videos
+    path('videos/create/', VideoCreateView.as_view(), name='video_create'),
+    path('videos/video-edit/', video_edit, name='video_edit'),
+
+
     # Ações do usuário
     path('movies/<int:movie_id>/watchlater/add/', add_to_watch_later, name='add_to_watch_later'),
     path('movies/<int:movie_id>/watchlater/remove/', remove_from_watch_later, name='remove_from_watch_later'),
@@ -56,6 +61,10 @@ urlpatterns = [
 
     #Busca
     path('search/', search_results, name='search_results'),
+
+    # Categorias
+    path('categorias/', all_categories, name='all_categories'),
+    path('categorias/<str:category>/', category_movies, name='show_movie_category'),
 ]
 
 if settings.DEBUG:
