@@ -480,18 +480,12 @@ class Watch(View):
             'show_case': showcase,
             'profile': profile,
         })
-
+    
 def category_movies(request, category):
     try:
-        movies = Movie.objects.filter(type=category)
-        return render(request, 'category_list.html', {'movies': movies, 'category': category})
-    except Exception:
-        return render(request, '404.html')
-
-def category_movies(request, category):
-    try:
-        movies = Movie.objects.filter(type=category)
-        return render(request, 'category_list.html', {'movies': movies, 'category': category})
+        category_obj = get_object_or_404(Category, name=category)
+        movies = Movie.objects.filter(type=category_obj)
+        return render(request, 'category_list.html', {'movies': movies, 'category': category_obj})
     except Exception:
         return render(request, '404.html')
 
