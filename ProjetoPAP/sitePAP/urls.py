@@ -38,7 +38,8 @@ urlpatterns = [
     # Categorias
     path('category/edit/', CategoryEditView.as_view(), name='category_edit'),
     path('category/create/', CategoryCreateView.as_view(), name='category_create'),
-
+    path('categorias/', all_categories, name='all_categories'),
+    path('categorias/<str:category>/', category_movies, name='show_movie_category'),
     
     # Videos
     path('videos/create/', VideoCreateView.as_view(), name='video_create'),
@@ -62,9 +63,6 @@ urlpatterns = [
     #Busca
     path('search/', search_results, name='search_results'),
 
-    # Categorias
-    path('categorias/', all_categories, name='all_categories'),
-    path('categorias/<str:category>/', category_movies, name='show_movie_category'),
 ]
 
 if settings.DEBUG:
